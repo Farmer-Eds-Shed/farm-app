@@ -1,0 +1,8 @@
+{
+  "name": "FarmApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "9d7f5df4"
+}
