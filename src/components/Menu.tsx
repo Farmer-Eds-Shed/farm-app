@@ -11,56 +11,59 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { bookmarkOutline } from 'ionicons/icons';
 import './Menu.css';
+
+import Icon from '@mdi/react';
+import { mdiHomeSilo, mdiCow, mdiSilo, mdiBarley, mdiTractor, mdiNotebook, mdiMedicalBag } from '@mdi/js';
+
 
 interface AppPage {
   url: string;
-  iosIcon: string;
-  mdIcon: string;
+
+  mdiIcon: string;
   title: string;
 }
 
 const appPages: AppPage[] = [
   {
-    title: 'Inbox',
-    url: '/folder/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
+    title: 'Home',
+    url: '/home',
+    mdiIcon: mdiHomeSilo
   },
   {
-    title: 'Outbox',
-    url: '/folder/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    title: 'Cattle',
+    url: '/cattle',
+    mdiIcon: mdiCow
   },
   {
-    title: 'Favorites',
-    url: '/folder/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
+    title: 'Treatment',
+    url: '/treatment',
+    mdiIcon: mdiMedicalBag
   },
   {
-    title: 'Archived',
-    url: '/folder/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    title: 'Feed',
+    url: '/feed',
+    mdiIcon: mdiSilo
   },
   {
-    title: 'Trash',
-    url: '/folder/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
+    title: 'Harvest',
+    url: '/harvest',
+    mdiIcon: mdiBarley
   },
   {
-    title: 'Spam',
-    url: '/folder/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
+    title: 'Machinery',
+    url: '/machinery',
+    mdiIcon: mdiTractor
+  },
+  {
+    title: 'Diary',
+    url: '/diary',
+    mdiIcon: mdiNotebook
   }
 ];
 
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+const labels = ['Bookmark',];
 
 const Menu: React.FC = () => {
   const location = useLocation();
@@ -69,14 +72,14 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
+          <IonListHeader>Farm-App</IonListHeader>
+          <IonNote>powered by farmOS</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                  <IonIcon aria-hidden="true" slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                  <IonLabel>{appPage.title}</IonLabel>
+                  <Icon path={appPage.mdiIcon} size={1} />
+                  <IonLabel>&nbsp;&nbsp;{appPage.title}</IonLabel>
                 </IonItem>
               </IonMenuToggle>
             );
