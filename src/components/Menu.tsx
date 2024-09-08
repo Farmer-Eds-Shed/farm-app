@@ -32,13 +32,13 @@ const appPages: AppPage[] = [
     mdiIcon: mdiHomeSilo
   },
   {
-    title: 'Cattle',
-    url: '/cattle',
+    title: 'Livestock',
+    url: '/livestock',
     mdiIcon: mdiCow
   },
   {
-    title: 'Treatment',
-    url: '/treatment',
+    title: 'Veterinary',
+    url: '/veterinary',
     mdiIcon: mdiMedicalBag
   },
   {
