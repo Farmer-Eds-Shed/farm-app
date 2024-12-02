@@ -14,6 +14,7 @@ const axiosInstance = axios.create({
     },
   });
 
+
   axiosInstance.interceptors.request.use(async request => {
     const accessToken = await store.get('accessToken');
     if (accessToken) {
@@ -33,16 +34,27 @@ const axiosInstance = axios.create({
         originalRequest._retry = true; // Mark the request as retried to avoid infinite loops.
         try {
           const refreshToken = await store.get('refreshToken'); // Retrieve the stored refresh token.
+          //console.log(refreshToken)
           // Make a request to your auth server to refresh the token.
-          const response = await axios.post(url + '/oauth/token', {
-            refreshToken,
+          const refreshResponse = await axios.post(url + '/oauth/token', {
+            "grant_type": "refresh_token",
+            "refresh_token": refreshToken,
+            "client_id" : "farm"
+            },
+            {
+            headers: {
+             "Accept": "application/json",
+              "content-type": "application/x-www-form-urlencoded",  
+            }
           });
-          const { accessToken, refreshToken: newRefreshToken } = response.data;
+          const newTokens = refreshResponse.data;
+          const access_token = newTokens.access_token;
+          const refresh_token = newTokens.refresh_token;
           // Store the new access and refresh tokens.
-          await store.set('accessToken', accessToken);
-          await store.set('refreshToken', newRefreshToken);
+          await store.set('accessToken', access_token);
+          await store.set('refreshToken', refresh_token);
           // Update the authorization header with the new access token.
-          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
           return axiosInstance(originalRequest); // Retry the original request with the new access token.
         } catch (refreshError) {
           // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
@@ -57,8 +69,6 @@ const axiosInstance = axios.create({
     }
   );
 
-
-  
 
   //API get request
   export const fetchData = async (endpoint: any) => {
