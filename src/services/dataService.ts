@@ -11,7 +11,7 @@ export const fetchEquipment = async () => {
         name: item.attributes.name,
         manufacturer: item.attributes.manufacturer,
         model: item.attributes.model,
-        notes: item.attributes.notes ? item.attributes.notes.value : null,
+        notes: item.attributes.notes ? item.attributes.notes.value : null, //value may not exist
         serial: item.attributes.serial_number,
         status: item.attributes.status,
         // Add more fields as needed

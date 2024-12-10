@@ -1,8 +1,6 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { IonItem, IonButton } from '@ionic/react';
+import { IonItem } from '@ionic/react';
 import './Page.css';
-//import { fetchData } from '../oauth2/request'
-import { Storage } from '@ionic/storage';
 import { useEffect, useState} from "react";
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { fetchEquipment } from '../services/dataService';
@@ -31,11 +29,11 @@ const EquipmentPage: React.FC = () => {
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
-    { field: "manufacturer" },
-    { field: "model" },
-    { field: "name" },
-    { field: "serial" },
-    { field: "notes" },
+    { field: "manufacturer", sortable: true, filter: true  },
+    { field: "model", sortable: true, filter: true  },
+    { field: "name", sortable: true, filter: true  },
+    { field: "serial", sortable: true, filter: true  },
+    { field: "notes", sortable: true, filter: true  },
 
   ]);
   
