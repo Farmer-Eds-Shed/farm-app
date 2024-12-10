@@ -1,36 +1,42 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { IonItem, IonButton } from '@ionic/react';
 import './Page.css';
-import { fetchData } from '../oauth2/request'
+//import { fetchData } from '../oauth2/request'
 import { Storage } from '@ionic/storage';
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
+import { fetchEquipment } from '../services/dataService';
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
+const EquipmentPage: React.FC = () => {
 
+  const [rowData, setRowData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-const test = async () => {
-  const store = new Storage();
-  await store.create();
-  console.log(fetchData('asset/equipment'));
-  
-}
+  useEffect(() => {
+    const tableData = async () => {
+      try {
+        const data = await fetchEquipment();
+        setRowData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
 
-
- const EquipmentPage: React.FC = () => {
-
-  const [rowData, setRowData] = useState([
-    { manufacturer: "McCormick", model: "CX95", identification: 64950 },
-    { manufacturer: "Massey Ferguson", model: "135", identification: 33850 },
-    { manufacturer: "Massey Ferguson", model: "205", identification: 29600 },
-  ]);
+    tableData();
+  }, []);
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
     { field: "manufacturer" },
     { field: "model" },
-    { field: "identification" }
+    { field: "name" },
+    { field: "serial" },
+    { field: "notes" },
+
   ]);
   
   return (
@@ -51,11 +57,15 @@ const test = async () => {
             rowData={rowData}
             // @ts-ignore
             columnDefs={colDefs}
+            pagination={true}
+            paginationPageSize={20}
+            // @ts-ignore
+            loadingOverlayComponentFramework={loading ? 'Loading...' : undefined}
           />
         </div>
         
         <IonItem>
-        <IonButton onClick={() => { test();}}>Test</IonButton>
+        
 
         </IonItem>
       </IonContent>

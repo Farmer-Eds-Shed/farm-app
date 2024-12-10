@@ -69,7 +69,7 @@ const axiosInstance = axios.create({
     }
   );
 
-
+/*
   //API get request
   export const fetchData = async (endpoint: any) => {
     try {
@@ -79,4 +79,6 @@ const axiosInstance = axios.create({
       console.error('Error fetching data:', error);
     }
   };
-  
+  */
+
+  export default axiosInstance;

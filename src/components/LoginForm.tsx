@@ -6,6 +6,13 @@ const store = new Storage();
 await store.create();
 
 
+const logout = async () => {
+  await store.set('refreshToken', "");
+  await store.set('accessToken', "");
+  console.log('Logout / clear all tokens')
+}
+
+
 export function LoginForm({farmUrl}:any) {
   
     const {
@@ -92,7 +99,8 @@ export function LoginForm({farmUrl}:any) {
             />
           </IonItem>
           <div>
-            <IonButton type="submit">submit</IonButton>
+            <IonButton type="submit">Login</IonButton>
+            <IonButton onClick={() => { logout();}}>Logout</IonButton>
           </div>
         </form>
     );
