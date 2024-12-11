@@ -1,6 +1,6 @@
 {
   "name": "farm-app",
-  "homepage": "https://<Username>.github.io/<Repository-name>",
+  "homepage": "https://farmer-eds-shed.github.io/farm-app",
   "private": true,
   "version": "0.0.1",
   "type": "module",
