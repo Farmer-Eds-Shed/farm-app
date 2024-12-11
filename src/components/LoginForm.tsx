@@ -1,15 +1,13 @@
 import { IonButton, IonItem, IonInput, IonToast } from '@ionic/react';
 import { useForm } from 'react-hook-form';
-import { Storage } from '@ionic/storage';
+import storageService from '../services/storageService';
 import { useState } from 'react';
 import { AutocompleteTypes, TextFieldTypes } from '@ionic/core'; // Import AutocompleteTypes and TextFieldTypes
 
-const store = new Storage();
-store.create();
 
 const logout = async (setShowLogoutSuccessToast: (value: boolean) => void) => {
-  await store.set('refreshToken', "");
-  await store.set('accessToken', "");
+  await storageService.removeItem('refreshToken');
+  await storageService.removeItem('accessToken');
   console.log('Logout / clear all tokens');
   setShowLogoutSuccessToast(true);
 };
@@ -64,8 +62,8 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
         throw new Error('Failed to authenticate');
       }
       const receivedData = await response.json();
-      await store.set('refreshToken', receivedData.refresh_token);
-      await store.set('accessToken', receivedData.access_token);
+      await storageService.setItem('refreshToken', receivedData.refresh_token);
+      await storageService.setItem('accessToken', receivedData.access_token);
       setShowSuccessToast(true);
     } catch (error: any) {
       console.error(error);
@@ -76,7 +74,7 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
 
   const onSubmit = async (data: FormData = getValues()) => {
     const sanitizedUrl = data.url.replace(/\/$/, "");
-    await store.set('url', sanitizedUrl);
+    await storageService.setItem('url', sanitizedUrl);
     setIsLoading(true);
     try {
       await authenticate({ ...data, url: sanitizedUrl });
