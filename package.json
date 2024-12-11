@@ -5,14 +5,14 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "lint": "eslint"
   },
   "dependencies": {
     "@ag-grid-community/react": "^32.3.3",
