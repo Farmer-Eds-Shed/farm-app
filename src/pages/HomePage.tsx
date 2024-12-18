@@ -1,8 +1,24 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import React from 'react';
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonRouterLink,
+} from '@ionic/react';
 import './Page.css';
+import Icon from '@mdi/react';
+import { appPages } from '../components/MenuList'; // Import the appPages array
+
+
 
 const HomePage: React.FC = () => {
-  
   return (
     <IonPage>
       <IonHeader>
@@ -15,9 +31,22 @@ const HomePage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <>
-            <h1>Home Page Content</h1>
-        </>
+        <IonGrid>
+        <IonRow>
+            {appPages
+              .filter(appPage => appPage.url !== '/home' || location.pathname !== '/home') // Hide "Home" link on HomePage
+              .map((appPage, index) => (
+                <IonCol size="6" key={index} className="icon-grid-item">
+                  <IonRouterLink routerLink={appPage.url}>
+                    <div className="icon-container">
+                      <Icon path={appPage.mdiIcon} size={3} />
+                      <p>{appPage.title}</p>
+                    </div>
+                  </IonRouterLink>
+                </IonCol>
+              ))}
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
