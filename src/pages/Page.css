@@ -31,23 +31,32 @@
 
   }
 
-  /* Page.css */
 
-.icon-grid-item {
-  text-align: center;
-  margin-bottom: 20px;
-}
+  .icon-grid-item {
+    text-align: center;
+    margin-bottom: 20px;
+    color: black;
+  }
 
-.icon-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.icon-container p {
-  margin-top: 10px;
-  font-size: 16px;
-}
+  .icon-container p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: black;
+  }
+
+  .page-icon {
+    color: dimgray; /* Set the icon color to black */
+  }
+
+  .icon-container:hover .page-icon {
+    color: black; /* Change the icon color to blue on hover */
+  }
 
   .ag-theme-quartz {
     width: 100%;

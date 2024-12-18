@@ -55,7 +55,7 @@ const EquipmentPage: React.FC = () => {
         {loading ? (
           <div className="spinner-container">
             <div className="spinner-wrapper">
-              <ClipLoader className="spinner" color="#36d7b7" loading={loading} size={50} />
+              <ClipLoader className="spinner" color="#696969" loading={loading} size={50} />
             </div>
           </div>
         ) : (
