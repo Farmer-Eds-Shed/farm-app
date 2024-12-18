@@ -39,7 +39,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.1",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "react-spinners": "^0.15.0"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",
