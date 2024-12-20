@@ -10,6 +10,8 @@ import HarvestPage from './pages/HarvestPage';
 import MachineryPage from './pages/MachineryPage';
 import DiaryPage from './pages/DiaryPage';
 import SettingsPage from './pages/SettingsPage';
+import OverviewTab from './pages/LivestockTabs/LivestockPurchased';
+import DetailsTab from './pages/LivestockTabs/LivestockActive';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

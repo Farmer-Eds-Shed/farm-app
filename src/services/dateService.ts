@@ -30,3 +30,4 @@ export function dateComparator(date1:any, date2:any) {
     // 29/08/2004 => 20040829
     return result;
   }
+
