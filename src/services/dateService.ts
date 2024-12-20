@@ -31,3 +31,15 @@ export function dateComparator(date1:any, date2:any) {
     return result;
   }
 
+// utc timestamp to date
+  export function justDate(isoDateString:any) {
+    const date = new Date(isoDateString);
+  
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getUTCFullYear();
+  
+    const ieDateString = `${day}/${month}/${year}`;
+    console.log(ieDateString); // Outputs: 07/02/2024
+    return(ieDateString);
+    };
