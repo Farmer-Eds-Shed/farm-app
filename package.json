@@ -8,7 +8,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
-    "build": "tsc && vite && react-scripts build",
+    "build": "react-scripts build",
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
