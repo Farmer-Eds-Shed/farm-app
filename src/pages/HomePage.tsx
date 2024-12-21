@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 import './Page.css';
 import Icon from '@mdi/react';
-import { appPages } from '../components/MenuList'; // Import the appPages array
+import { appPages } from '../constants/MenuList'; // Import the appPages array
 
 
 
