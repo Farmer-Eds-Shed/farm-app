@@ -53,6 +53,8 @@ const authenticate = async (data: any) => {
     },
   })
   const receivedData = await response.json()
+  store.set('refreshToken', receivedData.refresh_token);
+  store.set('accessToken', receivedData.access_token);
 
   console.log(receivedData)
 }
