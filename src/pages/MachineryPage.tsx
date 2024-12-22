@@ -4,32 +4,36 @@ import './Page.css';
 import { fetchData } from '../oauth2/request'
 import { Storage } from '@ionic/storage';
 
-const store = new Storage();
-await store.create();
 
-const test = () => {
-console.log(fetchData('asset/equipment'));
+
+const test = async () => {
+  const store = new Storage();
+  await store.create();
+  console.log(fetchData('asset/equipment'));
+  
 }
 
-const MachineryPage: React.FC = () => {
+ const EquipmentPage: React.FC = () => {
+
+  
   
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButton slot="start">
+          <IonButtons slot="start">
             <IonMenuButton />
-          </IonButton >
-          <IonTitle>Machinery</IonTitle>
+          </IonButtons>
+          <IonTitle>Equipment</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
       
-            <h1>Machinery Page Content</h1>
+            <h1>Equipment Page Content</h1>
         
         <IonItem>
-              <IonButton onClick={() => { test();}}/>Test
+        <IonButton onClick={() => { test();}}>Test</IonButton>
 
         </IonItem>
       </IonContent>
@@ -37,4 +41,4 @@ const MachineryPage: React.FC = () => {
   );
 };
 
-export default MachineryPage;
+export default EquipmentPage;
