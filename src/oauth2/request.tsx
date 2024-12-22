@@ -34,7 +34,6 @@ const axiosInstance = axios.create({
         originalRequest._retry = true; // Mark the request as retried to avoid infinite loops.
         try {
           const refreshToken = await store.get('refreshToken'); // Retrieve the stored refresh token.
-          //console.log(refreshToken)
           // Make a request to your auth server to refresh the token.
           const refreshResponse = await axios.post(url + '/oauth/token', {
             "grant_type": "refresh_token",
