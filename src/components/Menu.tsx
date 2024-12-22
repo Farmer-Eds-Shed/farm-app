@@ -15,7 +15,7 @@ import { bookmarkOutline } from 'ionicons/icons';
 import './Menu.css';
 
 import Icon from '@mdi/react';
-import { mdiHomeSilo, mdiCow, mdiSilo, mdiBarley, mdiTractor, mdiNotebook, mdiMedicalBag, mdiCog } from '@mdi/js';
+import { appPages } from './MenuList'; // Import the appPages array
 
 
 interface AppPage {
@@ -25,48 +25,6 @@ interface AppPage {
   title: string;
 }
 
-const appPages: AppPage[] = [
-  {
-    title: 'Home',
-    url: '/home',
-    mdiIcon: mdiHomeSilo
-  },
-  {
-    title: 'Livestock',
-    url: '/livestock',
-    mdiIcon: mdiCow
-  },
-  {
-    title: 'Veterinary',
-    url: '/veterinary',
-    mdiIcon: mdiMedicalBag
-  },
-  {
-    title: 'Feed',
-    url: '/feed',
-    mdiIcon: mdiSilo
-  },
-  {
-    title: 'Harvest',
-    url: '/harvest',
-    mdiIcon: mdiBarley
-  },
-  {
-    title: 'Machinery',
-    url: '/machinery',
-    mdiIcon: mdiTractor
-  },
-  {
-    title: 'Diary',
-    url: '/diary',
-    mdiIcon: mdiNotebook
-  },
-  {
-    title: 'Settings',
-    url: '/settings',
-    mdiIcon: mdiCog
-  }
-];
 
 const labels = ['Bookmark',];
 
