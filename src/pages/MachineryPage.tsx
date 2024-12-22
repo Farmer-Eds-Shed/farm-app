@@ -2,7 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import './Page.css';
 import { useEffect, useState} from "react";
 import { fetchEquipment } from '../services/dataService';
-import { ClipLoader } from 'react-spinners'; // Import the spinner
+import Spinner from '../components/Spinner'; // Import the Spinner component
 import Table from '../components/Table'; // Import the new table component
 
 const EquipmentPage: React.FC = () => {
@@ -27,11 +27,6 @@ const EquipmentPage: React.FC = () => {
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
-    {
-      headerCheckboxSelection: true, // Display checkbox in the header
-      checkboxSelection: true, // Display checkboxes in the rows
-      width: 50, // Set the width of the checkbox column
-    },
     { field: "manufacturer", sortable: true, filter: true  },
     { field: "model", sortable: true, filter: true  },
     { field: "name", sortable: true, filter: true  },
@@ -53,11 +48,7 @@ const EquipmentPage: React.FC = () => {
 
       <IonContent fullscreen>
         {loading ? (
-          <div className="spinner-container">
-            <div className="spinner-wrapper">
-              <ClipLoader className="spinner" color="#696969" loading={loading} size={50} />
-            </div>
-          </div>
+          <Spinner loading={loading} />
         ) : (
           <Table rowData={rowData} colDefs={colDefs} />
         )}

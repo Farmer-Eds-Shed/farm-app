@@ -1,41 +1,22 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './Page.css';
-import { useEffect, useState } from 'react';
-import { fetchAnimals } from '../services/dataService';
-import { ClipLoader } from 'react-spinners'; // Import the spinner
-import Table from '../components/Table'; // Import the new table component
-import { dateComparator } from '../services/dateService';
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonToolbar,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+} from '@ionic/react';
+import { useState } from 'react';
+import PurchasedTab from './LivestockTabs/LivestockPurchased';
+import ActiveTab from './LivestockTabs/LivestockActive';
+import SoldTab from './LivestockTabs/LivestockSold';
+import MortalityTab from './LivestockTabs/LivestockMortality';
 
 const LivestockPage: React.FC = () => {
-  const [rowData, setRowData] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const tableData = async () => {
-      try {
-        const data = await fetchAnimals();
-        setRowData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    tableData();
-  }, []);
-
-  const [colDefs] = useState([
-    {
-      headerCheckboxSelection: true, // Display checkbox in the header
-      checkboxSelection: true, // Display checkboxes in the rows
-      width: 50, // Set the width of the checkbox column
-    },
-    { field: 'name', sortable: true, filter: true },
-    { field: 'birthdate', sortable: true, filter: true, comparator: dateComparator },
-    { field: 'tag', sortable: true, filter: true },
-    { field: 'notes', sortable: true, filter: true },
-  ]);
+  const [selectedTab, setSelectedTab] = useState<'purchased' | 'active' | 'sold' | 'mortality'>('active');
 
   return (
     <IonPage>
@@ -44,20 +25,29 @@ const LivestockPage: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Livestock</IonTitle>
+          <IonSegment value={selectedTab} onIonChange={e => setSelectedTab(e.detail.value as 'purchased' | 'active' | 'sold'| 'mortality')}>
+          <IonSegmentButton value="active">
+            <IonLabel>Active</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="purchased">
+            <IonLabel>Purchased</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="sold">
+            <IonLabel>Sold</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="mortality">
+            <IonLabel>Mortality</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {loading ? (
-          <div className="spinner-container">
-            <div className="spinner-wrapper">
-              <ClipLoader className="spinner" color="#696969" loading={loading} size={50} />
-            </div>
-          </div>
-        ) : (
-          <Table rowData={rowData} colDefs={colDefs} />
-        )}
+        {selectedTab === 'active' && <ActiveTab />}
+        {selectedTab === 'purchased' && <PurchasedTab />}
+        {selectedTab === 'sold' && <SoldTab />}
+        {selectedTab === 'mortality' && <MortalityTab />}
+        
       </IonContent>
     </IonPage>
   );

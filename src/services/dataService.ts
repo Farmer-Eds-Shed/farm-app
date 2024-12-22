@@ -33,6 +33,7 @@ export const fetchEquipment = async () => {
       const extractedData = response.data.data.map((item: any) => ({
         id: item.id,
         name: item.attributes.name,
+        sex: item.attributes.sex,
         birthdate: irishTime(item.attributes.birthdate),
         notes: item.attributes.notes ? item.attributes.notes.value : null, //value may not exist
         tag: item.attributes.id_tag[0].id,

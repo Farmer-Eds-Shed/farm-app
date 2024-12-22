@@ -1,0 +1,11 @@
+@media only screen and (max-width: 500px) {
+    /* Hide the label in the footer */
+    .ag-label {
+        display: none
+    }
+
+    /* Hide the paging description in the footer */
+    .ag-paging-description {
+        display: none
+    }
+}

@@ -34,14 +34,14 @@ const Menu: React.FC = () => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
-        <IonList id="inbox-list">
+        <IonList id="menu-list">
           <IonListHeader>Farm-App</IonListHeader>
           <IonNote>powered by farmOS</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                  <Icon path={appPage.mdiIcon} size={1} />
+                  <Icon path={appPage.mdiIcon} size={1} className="menu-icons" />
                   <IonLabel>&nbsp;&nbsp;{appPage.title}</IonLabel>
                 </IonItem>
               </IonMenuToggle>
