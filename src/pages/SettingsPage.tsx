@@ -2,7 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { IonButton, IonItem, IonInput } from '@ionic/react';
 import './Page.css';
 import { useForm } from 'react-hook-form';
-import React from "react";
+import React, {useRef} from "react";
 
 
 const SettingsPage: React.FC = () => {
@@ -10,6 +10,7 @@ const SettingsPage: React.FC = () => {
     handleSubmit,
     register,
     getValues,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -22,6 +23,8 @@ const SettingsPage: React.FC = () => {
   //console.log(errors);
   //console.log(getValues());
 
+
+
 function authenticate(data: any) {
   console.log(data)
 }
@@ -31,7 +34,7 @@ function authenticate(data: any) {
    *
    * @param data
    */
-  const onSubmit = (data: any) => {
+  const onSubmit = (data = getValues()) => {
     //alert(JSON.stringify(data, null, 2));
     authenticate(data)
   };
@@ -53,17 +56,22 @@ function authenticate(data: any) {
           <form onSubmit={handleSubmit(onSubmit)}>
 
             <IonItem>
-              <IonInput label='Username:'
+              <IonInput autocomplete="username" label='Username:' 
+                onIonChange={(e: any) => {setValue('username', e.target.value);}}
                 {...register('username', {
                   required: 'This is a required field',
-                })}
+                })} 
+                  
               />
             </IonItem>
             <IonItem>
-              <IonInput type='password' label='Password:'
+              <IonInput autocomplete="current-password" type='password' label='Password:'
+                onIonChange={(e: any) => {setValue('password', e.target.value);}}
                 {...register('password', {
                   required: 'This is a required field',
-                })}
+                  
+                })} 
+                
               />
             </IonItem>
 
