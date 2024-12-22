@@ -13,7 +13,7 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "start": "serve -s build"
+    "start": "node server.cjs"
   },
   "dependencies": {
     "@ag-grid-community/react": "^32.3.3",
@@ -32,16 +32,23 @@
     "@types/react-router-dom": "^5.3.3",
     "ag-grid-react": "^33.0.3",
     "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "connect": "^3.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
     "ionicons": "^7.0.0",
     "mdi": "^2.2.43",
     "mdi-react": "^9.4.0",
+    "morgan": "^1.10.0",
     "path-to-regexp": "^1.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.1",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "react-spinners": "^0.15.0"
+    "react-spinners": "^0.15.0",
+    "serve-static": "^1.11.1",
+    "typescript": "^5.1.6"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",
