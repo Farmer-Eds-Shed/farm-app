@@ -1,13 +1,11 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Page.css';
-import { useEffect, useState} from "react";
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
+import { useEffect, useState } from 'react';
 import { fetchAnimals } from '../services/dataService';
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import { ClipLoader } from 'react-spinners'; // Import the spinner
+import Table from '../components/Table'; // Import the new table component
 
 const LivestockPage: React.FC = () => {
-
   const [rowData, setRowData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -16,25 +14,28 @@ const LivestockPage: React.FC = () => {
       try {
         const data = await fetchAnimals();
         setRowData(data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
         setLoading(false);
       }
     };
 
     tableData();
   }, []);
-  
-  // Column Definitions: Defines the columns to be displayed.
-  const [colDefs, setColDefs] = useState([
-    { field: "name", sortable: true, filter: true  },
-    { field: "birthdate", sortable: true, filter: true  },
-    { field: "tag", sortable: true, filter: true  },
-    { field: "notes", sortable: true, filter: true  },
 
+  const [colDefs] = useState([
+    {
+      headerCheckboxSelection: true, // Display checkbox in the header
+      checkboxSelection: true, // Display checkboxes in the rows
+      width: 50, // Set the width of the checkbox column
+    },
+    { field: 'name', sortable: true, filter: true },
+    { field: 'birthdate', sortable: true, filter: true },
+    { field: 'tag', sortable: true, filter: true },
+    { field: 'notes', sortable: true, filter: true },
   ]);
-  
+
   return (
     <IonPage>
       <IonHeader>
@@ -47,17 +48,15 @@ const LivestockPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <div className="ag-theme-quartz" style={{ height: '100%', width: '100%' }}>
-          <AgGridReact
-            rowData={rowData}
-            // @ts-ignore
-            columnDefs={colDefs}
-            pagination={true}
-            paginationPageSize={20}
-            // @ts-ignore
-            loadingOverlayComponentFramework={loading ? 'Loading...' : undefined}
-          />
-        </div>
+        {loading ? (
+          <div className="spinner-container">
+            <div className="spinner-wrapper">
+              <ClipLoader className="spinner" color="#36d7b7" loading={loading} size={50} />
+            </div>
+          </div>
+        ) : (
+          <Table rowData={rowData} colDefs={colDefs} />
+        )}
       </IonContent>
     </IonPage>
   );

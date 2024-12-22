@@ -1,11 +1,9 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { IonItem } from '@ionic/react';
 import './Page.css';
 import { useEffect, useState} from "react";
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { fetchEquipment } from '../services/dataService';
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import { ClipLoader } from 'react-spinners'; // Import the spinner
+import Table from '../components/Table'; // Import the new table component
 
 const EquipmentPage: React.FC = () => {
 
@@ -29,6 +27,11 @@ const EquipmentPage: React.FC = () => {
   
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
+    {
+      headerCheckboxSelection: true, // Display checkbox in the header
+      checkboxSelection: true, // Display checkboxes in the rows
+      width: 50, // Set the width of the checkbox column
+    },
     { field: "manufacturer", sortable: true, filter: true  },
     { field: "model", sortable: true, filter: true  },
     { field: "name", sortable: true, filter: true  },
@@ -49,23 +52,15 @@ const EquipmentPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-      
-        <div className="ag-theme-quartz" style={{ height: '100%', width: '100%' }}>
-          <AgGridReact
-            rowData={rowData}
-            // @ts-ignore
-            columnDefs={colDefs}
-            pagination={true}
-            paginationPageSize={20}
-            // @ts-ignore
-            loadingOverlayComponentFramework={loading ? 'Loading...' : undefined}
-          />
-        </div>
-        
-        <IonItem>
-        
-
-        </IonItem>
+        {loading ? (
+          <div className="spinner-container">
+            <div className="spinner-wrapper">
+              <ClipLoader className="spinner" color="#36d7b7" loading={loading} size={50} />
+            </div>
+          </div>
+        ) : (
+          <Table rowData={rowData} colDefs={colDefs} />
+        )}
       </IonContent>
     </IonPage>
   );
