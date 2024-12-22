@@ -7,10 +7,11 @@ import { AutocompleteTypes, TextFieldTypes } from '@ionic/core'; // Import Autoc
 const store = new Storage();
 store.create();
 
-const logout = async () => {
+const logout = async (setShowLogoutSuccessToast: (value: boolean) => void) => {
   await store.set('refreshToken', "");
   await store.set('accessToken', "");
   console.log('Logout / clear all tokens');
+  setShowLogoutSuccessToast(true);
 };
 
 interface FormData {
@@ -23,6 +24,7 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
   const [showErrorToast, setShowErrorToast] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showLogoutSuccessToast, setShowLogoutSuccessToast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -65,7 +67,7 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
       await store.set('refreshToken', receivedData.refresh_token);
       await store.set('accessToken', receivedData.access_token);
       setShowSuccessToast(true);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error);
       setShowErrorToast(true);
       setErrorMessage(error.message);
@@ -111,7 +113,7 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
         <IonButton type="submit" disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Login'}
         </IonButton>
-        <IonButton onClick={() => { logout(); }}>Logout</IonButton>
+        <IonButton onClick={() => { logout(setShowLogoutSuccessToast); }}>Logout</IonButton>
       </div>
       {showErrorToast && (
         <IonToast
@@ -129,6 +131,15 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
           duration={2000}
           color="success"
           onDidDismiss={() => setShowSuccessToast(false)}
+        />
+      )}
+      {showLogoutSuccessToast && (
+        <IonToast
+          isOpen={showLogoutSuccessToast}
+          message="Logout successful!"
+          duration={2000}
+          color="success"
+          onDidDismiss={() => setShowLogoutSuccessToast(false)}
         />
       )}
     </form>
