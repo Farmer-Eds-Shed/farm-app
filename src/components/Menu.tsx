@@ -15,7 +15,7 @@ import { bookmarkOutline } from 'ionicons/icons';
 import './Menu.css';
 
 import Icon from '@mdi/react';
-import { mdiHomeSilo, mdiCow, mdiSilo, mdiBarley, mdiTractor, mdiNotebook, mdiMedicalBag } from '@mdi/js';
+import { mdiHomeSilo, mdiCow, mdiSilo, mdiBarley, mdiTractor, mdiNotebook, mdiMedicalBag, mdiCog } from '@mdi/js';
 
 
 interface AppPage {
@@ -60,6 +60,11 @@ const appPages: AppPage[] = [
     title: 'Diary',
     url: '/diary',
     mdiIcon: mdiNotebook
+  },
+  {
+    title: 'Settings',
+    url: '/settings',
+    mdiIcon: mdiCog
   }
 ];
 
