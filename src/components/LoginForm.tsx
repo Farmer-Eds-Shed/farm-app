@@ -1,6 +1,8 @@
-import { IonButton, IonItem, IonInput } from '@ionic/react';
+import { IonButton, IonItem, IonInput, IonToast } from '@ionic/react';
 import { useForm } from 'react-hook-form';
 import { Storage } from '@ionic/storage';
+import { useState } from 'react';
+import { AutocompleteTypes, TextFieldTypes } from '@ionic/core'; // Import AutocompleteTypes and TextFieldTypes
 
 const store = new Storage();
 store.create();
@@ -18,6 +20,11 @@ interface FormData {
 }
 
 export function LoginForm({ farmUrl }: { farmUrl: string }) {
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     handleSubmit,
     register,
@@ -32,7 +39,6 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
     }
   });
 
-  // farmOS Auth0 token request
   const authenticate = async (data: FormData) => {
     const params = new URLSearchParams();
 
@@ -52,60 +58,79 @@ export function LoginForm({ farmUrl }: { farmUrl: string }) {
           "content-type": "application/x-www-form-urlencoded",
         },
       });
+      if (!response.ok) {
+        throw new Error('Failed to authenticate');
+      }
       const receivedData = await response.json();
       await store.set('refreshToken', receivedData.refresh_token);
       await store.set('accessToken', receivedData.access_token);
-    } catch (error) {
+      setShowSuccessToast(true);
+    } catch (error:any) {
       console.error(error);
+      setShowErrorToast(true);
+      setErrorMessage(error.message);
     }
   };
 
-  const onSubmit = (data: FormData = getValues()) => {
+  const onSubmit = async (data: FormData = getValues()) => {
     const sanitizedUrl = data.url.replace(/\/$/, "");
-    store.set('url', sanitizedUrl);
-    authenticate({ ...data, url: sanitizedUrl });
+    await store.set('url', sanitizedUrl);
+    setIsLoading(true);
+    try {
+      await authenticate({ ...data, url: sanitizedUrl });
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const renderInput = (name: keyof FormData, type: TextFieldTypes, label: string, autoComplete: AutocompleteTypes) => (
+    <IonItem>
+      <IonInput
+        autocomplete={autoComplete}
+        type={type}
+        label={label}
+        onIonChange={(e: any) => { setValue(name, e.target.value); }}
+        {...register(name, {
+          required: 'This is a required field',
+          pattern: name === 'url' ? {
+            value: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+            message: 'Invalid URL',
+          } : undefined,
+        })}
+      />
+      {errors[name] && <span>{errors[name]?.message}</span>}
+    </IonItem>
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <IonItem>
-        <IonInput
-          autocomplete="url"
-          label="url:"
-          onIonChange={(e: any) => { setValue('url', e.target.value.replace(/\/$/, "")); }}
-          {...register('url', {
-            required: 'This is a required field',
-          })}
-        />
-        {errors.url && <span>{errors.url.message}</span>}
-      </IonItem>
-      <IonItem>
-        <IonInput
-          autocomplete="username"
-          label='Username:'
-          onIonChange={(e: any) => { setValue('username', e.target.value); }}
-          {...register('username', {
-            required: 'This is a required field',
-          })}
-        />
-        {errors.username && <span>{errors.username.message}</span>}
-      </IonItem>
-      <IonItem>
-        <IonInput
-          autocomplete="current-password"
-          type='password'
-          label='Password:'
-          onIonChange={(e: any) => { setValue('password', e.target.value); }}
-          {...register('password', {
-            required: 'This is a required field',
-          })}
-        />
-        {errors.password && <span>{errors.password.message}</span>}
-      </IonItem>
+      {renderInput('url', 'text', 'URL:', 'url')}
+      {renderInput('username', 'text', 'Username:', 'username')}
+      {renderInput('password', 'password', 'Password:', 'current-password')}
       <div>
-        <IonButton type="submit">Login</IonButton>
+        <IonButton type="submit" disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Login'}
+        </IonButton>
         <IonButton onClick={() => { logout(); }}>Logout</IonButton>
       </div>
+      {showErrorToast && (
+        <IonToast
+          isOpen={showErrorToast}
+          message={errorMessage}
+          duration={2000}
+          color="danger"
+          onDidDismiss={() => setShowErrorToast(false)}
+        />
+      )}
+      {showSuccessToast && (
+        <IonToast
+          isOpen={showSuccessToast}
+          message="Login successful!"
+          duration={2000}
+          color="success"
+          onDidDismiss={() => setShowSuccessToast(false)}
+        />
+      )}
     </form>
   );
 }

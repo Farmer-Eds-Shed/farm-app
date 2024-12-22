@@ -1,27 +1,29 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonToast } from '@ionic/react';
 import './Page.css';
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Storage } from '@ionic/storage';
-import {LoginForm} from '../components/LoginForm'
+import { LoginForm } from '../components/LoginForm';
 
-
-//form variables
 const SettingsPage: React.FC = () => {
-  const [url, setUrl] = useState(null);
+  const [url, setUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const setupStorage = async () => {
-      const newStore = new Storage();
-      const store = await newStore.create();
- 
-      const saveUrl = (await store.get('url'));
-      setUrl(saveUrl || "https://");
-    }
-    setupStorage()
-  }, [])
+      try {
+        const newStore = new Storage();
+        const store = await newStore.create();
+        const savedUrl = await store.get('url');
+        setUrl(savedUrl || "https://");
+      } catch (err) {
+        console.error("Failed to set up storage:", err);
+        setError("Failed to load settings. Please try again.");
+      }
+    };
+    setupStorage();
+  }, []);
 
-  
-  return url ? (
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -32,15 +34,22 @@ const SettingsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <div id = "container">
+        <div id="container">
           <h2>farmOS Login</h2>
-          <LoginForm farmUrl={url}/>
-          </div>
-        </IonContent>
+          {url ? <LoginForm farmUrl={url} /> : "Loading..."}
+        </div>
+        {error && (
+          <IonToast
+            isOpen={!!error}
+            message={error}
+            duration={2000}
+            color="danger"
+            onDidDismiss={() => setError(null)}
+          />
+        )}
+      </IonContent>
     </IonPage>
-  ) : <>Loading....</>;
+  );
 };
-
-
 
 export default SettingsPage;
