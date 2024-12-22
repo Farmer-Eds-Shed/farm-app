@@ -61,7 +61,7 @@ const App: React.FC = () => {
             <Route path="/harvest" render={() => <HarvestPage />} exact={true} />
             <Route path="/machinery" render={() => <MachineryPage />} exact={true} />
             <Route path="/diary" render={() => <DiaryPage />} exact={true} />
-            <Route path="/settings" render={() => <SettingsPage />} exact={true} />
+            <Route path="/settings" render={() => <SettingsPage />} exact={true} />          
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
