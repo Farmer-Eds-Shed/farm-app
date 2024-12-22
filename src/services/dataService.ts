@@ -1,9 +1,10 @@
 // src/services/dataService.ts
-import axiosInstance from '../oauth2/request';
+import axiosInstancePromise from '../oauth2/request';
 
 export const fetchEquipment = async () => {
     try {
-      const response = await axiosInstance.get('/api/asset/equipment')
+      const axiosInstance = await axiosInstancePromise;
+      const response = await axiosInstance.get('/api/asset/equipment');
       // Extract necessary fields from the response
       console.log(response.data.data)
       const extractedData = response.data.data.map((item: any) => ({

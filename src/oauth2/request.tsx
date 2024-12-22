@@ -1,7 +1,6 @@
 import axios from 'axios';
 import storageService from '../services/storageService';
 
-// Function to initialize Axios instance after URL resolution
 const initializeAxios = async () => {
   await storageService.init(); // Ensure storage service is initialized
   const url = await storageService.getItem('url');
@@ -69,6 +68,5 @@ const initializeAxios = async () => {
   return axiosInstance;
 };
 
-// Initialize Axios instance and export
-const axiosInstance = await initializeAxios();
-export default axiosInstance;
+const axiosInstancePromise = initializeAxios();
+export default axiosInstancePromise;
