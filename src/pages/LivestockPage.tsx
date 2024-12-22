@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetchAnimals } from '../services/dataService';
 import { ClipLoader } from 'react-spinners'; // Import the spinner
 import Table from '../components/Table'; // Import the new table component
+import { dateComparator } from '../services/dateService';
 
 const LivestockPage: React.FC = () => {
   const [rowData, setRowData] = useState<any[]>([]);
@@ -31,7 +32,7 @@ const LivestockPage: React.FC = () => {
       width: 50, // Set the width of the checkbox column
     },
     { field: 'name', sortable: true, filter: true },
-    { field: 'birthdate', sortable: true, filter: true },
+    { field: 'birthdate', sortable: true, filter: true, comparator: dateComparator },
     { field: 'tag', sortable: true, filter: true },
     { field: 'notes', sortable: true, filter: true },
   ]);
@@ -51,7 +52,7 @@ const LivestockPage: React.FC = () => {
         {loading ? (
           <div className="spinner-container">
             <div className="spinner-wrapper">
-              <ClipLoader className="spinner" color="#36d7b7" loading={loading} size={50} />
+              <ClipLoader className="spinner" color="#696969" loading={loading} size={50} />
             </div>
           </div>
         ) : (
