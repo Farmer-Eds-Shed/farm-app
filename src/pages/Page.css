@@ -30,3 +30,15 @@
     max-width: 500px
 
   }
+
+  .ag-theme-quartz {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 600px) {
+    .ag-theme-quartz {
+      height: 300px; /* Adjust height for smaller screens */
+    }
+  }

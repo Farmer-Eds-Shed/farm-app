@@ -50,7 +50,7 @@ const EquipmentPage: React.FC = () => {
 
       <IonContent fullscreen>
       
-        <div className="ag-theme-quartz" style={{ height: 500 }} >
+        <div className="ag-theme-quartz" style={{ height: '100%', width: '100%' }}>
           <AgGridReact
             rowData={rowData}
             // @ts-ignore
