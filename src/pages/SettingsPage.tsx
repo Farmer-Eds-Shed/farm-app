@@ -2,9 +2,15 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { IonButton, IonItem, IonInput } from '@ionic/react';
 import './Page.css';
 import { useForm } from 'react-hook-form';
-import React, {useRef} from "react";
+import React from "react";
+import { Storage } from '@ionic/storage';
 
+//initialize storage
+const store = new Storage();
+await store.create();
+let url = await store.get('url');
 
+//form variables
 const SettingsPage: React.FC = () => {
   const {
     handleSubmit,
@@ -15,8 +21,8 @@ const SettingsPage: React.FC = () => {
   } = useForm({
     defaultValues: {
       username: '',
-      password: ''
-
+      password: '',
+      url: url
     }
   });
 
@@ -24,9 +30,36 @@ const SettingsPage: React.FC = () => {
   //console.log(getValues());
 
 
+  //farmOS Auth0 token request
+const authenticate = async (data: any) => {
+  const params = new URLSearchParams();
 
-function authenticate(data: any) {
-  console.log(data)
+  params.append("grant_type", "password");
+  params.append("username", data.username);
+  params.append("password", data.password);
+  params.append("client_id", "farm");
+  params.append("scope", "farm_manager");
+
+  try {
+  url = await store.get('url');
+  console.log(url)  
+  const response = await fetch(url + "/oauth/token", {
+    method: "POST",
+    cache: 'no-cache',
+    body: params,
+    headers: {
+      "Accept": "application/json",
+      "content-type": "application/x-www-form-urlencoded",
+    },
+  })
+  const receivedData = await response.json()
+
+  console.log(receivedData)
+}
+
+  catch (error){
+    console.error(error);
+  }
 }
 
 
@@ -35,7 +68,7 @@ function authenticate(data: any) {
    * @param data
    */
   const onSubmit = (data = getValues()) => {
-    //alert(JSON.stringify(data, null, 2));
+    store.set('url', data.url);
     authenticate(data)
   };
   
@@ -49,19 +82,24 @@ function authenticate(data: any) {
           <IonTitle>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
-
       <IonContent className="ion-padding">
         <div id = "container">
           <h2>farmOS Login</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-
+          <IonItem>
+              <IonInput autocomplete="url" label='url:' 
+                onIonChange={(e: any) => {setValue('url', e.target.value);}}
+                {...register('url', {
+                  required: 'This is a required field',
+                })}    
+              />
+            </IonItem>
             <IonItem>
               <IonInput autocomplete="username" label='Username:' 
                 onIonChange={(e: any) => {setValue('username', e.target.value);}}
                 {...register('username', {
                   required: 'This is a required field',
-                })} 
-                  
+                })}    
               />
             </IonItem>
             <IonItem>
@@ -69,13 +107,9 @@ function authenticate(data: any) {
                 onIonChange={(e: any) => {setValue('password', e.target.value);}}
                 {...register('password', {
                   required: 'This is a required field',
-                  
-                })} 
-                
+                })}    
               />
             </IonItem>
-
-
             <div>
               <IonButton type="submit">submit</IonButton>
             </div>
