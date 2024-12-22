@@ -1,5 +1,5 @@
-// src/components/Table.tsx
 import React from 'react';
+import { ClipLoader } from 'react-spinners';
 import { AgGridReact } from 'ag-grid-react';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { themeQuartz, iconSetQuartzLight } from 'ag-grid-community';
@@ -27,32 +27,38 @@ const myTheme = themeQuartz
         wrapperBorder: true,
         wrapperBorderRadius: 0
     });
-
+	
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 interface TableProps {
-  rowData: any[];
-  colDefs: any[];
-  onSelectionChanged: (event: any) => void;
+    rowData: any[];
+    colDefs: any[];
+    loading: boolean;
+    onSelectionChanged?: (event: any) => void;
 }
 
-const Table: React.FC<TableProps> = ({ rowData, colDefs, onSelectionChanged }) => {
-    
-  return (
-    
-    <div style={{ height: '100%', width: '100%' }}>
-      <AgGridReact
-        theme={myTheme}
-        rowData={rowData}
-        columnDefs={colDefs}
-        rowSelection={{mode: 'multiRow'}}
-        pagination={true}
-        paginationPageSize={50}
-        onSelectionChanged={onSelectionChanged}
-      />
-    </div>
-    
-  );
+const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionChanged }) => {
+    return (
+        <div style={{ height: '100%', width: '100%' }}>
+            {loading ? (
+                <div className="spinner-container">
+                    <div className="spinner-wrapper">
+                        <ClipLoader className="spinner" color="#696969" loading={loading} size={50} />
+                    </div>
+                </div>
+            ) : (
+                <AgGridReact
+                    theme={myTheme}
+					rowData={rowData}
+					columnDefs={colDefs}
+					rowSelection={{mode: 'multiRow'}}
+					pagination={true}
+					paginationPageSize={50}
+					onSelectionChanged={onSelectionChanged}
+                />
+            )}
+        </div>
+    );
 };
 
 export default Table;
