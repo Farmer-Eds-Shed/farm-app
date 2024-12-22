@@ -35,9 +35,12 @@ interface TableProps {
     colDefs: any[];
     loading: boolean;
     onSelectionChanged?: (event: any) => void;
+    onCellClicked: (cellData: any) => void;
 }
 
-const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionChanged }) => {
+const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionChanged, onCellClicked }) => {
+  
+
     return (
         <div style={{ height: '100%', width: '100%' }}>
             {loading ? (
@@ -55,6 +58,7 @@ const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionCha
 					pagination={true}
 					paginationPageSize={50}
 					onSelectionChanged={onSelectionChanged}
+          onCellClicked={params => onCellClicked(params.data)} // Pass cell data to the handler
                 />
             )}
         </div>
