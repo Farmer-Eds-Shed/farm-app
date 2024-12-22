@@ -24,7 +24,7 @@ const myTheme = themeQuartz
         rowBorder: false,
         sidePanelBorder: false,
         spacing: 8,
-        wrapperBorder: false,
+        wrapperBorder: true,
         wrapperBorderRadius: 0
     });
 
@@ -33,9 +33,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 interface TableProps {
   rowData: any[];
   colDefs: any[];
+  onSelectionChanged: (event: any) => void;
 }
 
-const Table: React.FC<TableProps> = ({ rowData, colDefs }) => {
+const Table: React.FC<TableProps> = ({ rowData, colDefs, onSelectionChanged }) => {
     
   return (
     
@@ -47,6 +48,7 @@ const Table: React.FC<TableProps> = ({ rowData, colDefs }) => {
         rowSelection={{mode: 'multiRow'}}
         pagination={true}
         paginationPageSize={50}
+        onSelectionChanged={onSelectionChanged}
       />
     </div>
     

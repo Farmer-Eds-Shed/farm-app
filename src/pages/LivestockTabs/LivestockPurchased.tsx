@@ -9,6 +9,7 @@ const OverviewTab: React.FC = () => {
     const [rowData, setRowData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const colDefs = livestockColDefs;
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
   
     useEffect(() => {
       const tableData = async () => {
@@ -24,6 +25,16 @@ const OverviewTab: React.FC = () => {
   
       tableData();
     }, []);
+
+    const onSelectionChanged = (event:any) => {
+      setSelectedRows(event.api.getSelectedRows());
+    };
+  
+    useEffect(() => {
+      if (selectedRows.length > 0) {
+        console.log('Selected Rows:', selectedRows);
+      }
+    }, [selectedRows]);
   
 
     return (
@@ -36,7 +47,7 @@ const OverviewTab: React.FC = () => {
               </div>
             </div>
           ) : (
-            <Table rowData={rowData} colDefs={colDefs} />
+            <Table rowData={rowData} colDefs={colDefs} onSelectionChanged={onSelectionChanged}/>
           )}
   </div>
 

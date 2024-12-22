@@ -7,7 +7,8 @@ import { livestockColDefs } from '../../constants/ColumnDefinitions';
 const ActiveTab: React.FC = () => {
     const [rowData, setRowData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const colDefs = livestockColDefs; 
+    const colDefs = livestockColDefs;
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     useEffect(() => {
       const tableData = async () => {
@@ -24,6 +25,16 @@ const ActiveTab: React.FC = () => {
       tableData();
     }, []);
 
+    const onSelectionChanged = (event:any) => {
+      setSelectedRows(event.api.getSelectedRows());
+    };
+  
+    useEffect(() => {
+      if (selectedRows.length > 0) {
+        console.log('Selected Rows:', selectedRows);
+      }
+    }, [selectedRows]);
+
     return (
       <div style={{ height: '100%', width: '100%' }}>
         {loading ? (
@@ -33,7 +44,7 @@ const ActiveTab: React.FC = () => {
             </div>
           </div>
         ) : (
-          <Table rowData={rowData} colDefs={colDefs} />
+          <Table rowData={rowData} colDefs={colDefs} onSelectionChanged={onSelectionChanged} />
         )}
       </div>
     );

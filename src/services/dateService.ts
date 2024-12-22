@@ -40,6 +40,5 @@ export function dateComparator(date1:any, date2:any) {
     const year = date.getUTCFullYear();
   
     const ieDateString = `${day}/${month}/${year}`;
-    console.log(ieDateString); // Outputs: 07/02/2024
     return(ieDateString);
     };
