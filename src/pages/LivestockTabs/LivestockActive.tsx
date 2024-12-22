@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { fetchAnimals } from '../../services/dataService';
+import { fetchActiveAnimals } from '../../services/dataService';
 import { ClipLoader } from 'react-spinners'; // Import the spinner
 import Table from '../../components/Table'; // Import the new table component
 import { dateComparator } from '../../services/dateService';
 
-const OverviewTab: React.FC = () => {
+const ActiveTab: React.FC = () => {
     const [rowData, setRowData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
   
     useEffect(() => {
       const tableData = async () => {
         try {
-          const data = await fetchAnimals();
+          const data = await fetchActiveAnimals();
           setRowData(data);
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -49,4 +49,4 @@ const OverviewTab: React.FC = () => {
   };
 
 
-export default OverviewTab;
+export default ActiveTab;

@@ -1,62 +1,114 @@
-// src/services/dataService.ts
 import axiosInstancePromise from '../oauth2/request';
+import { justDate } from './dateService';
 
+// Define the structure of the expected data using TypeScript interfaces
+interface AnimalAttributes {
+  name: string;
+  sex: string;
+  birthdate: string;
+  notes?: { value: string };
+  id_tag?: { id: string }[];
+  status: string;
+}
+
+interface AnimalData {
+  id: string;
+  attributes: AnimalAttributes;
+}
+
+interface EquipmentAttributes {
+  name: string;
+  manufacturer: string;
+  model: string;
+  notes?: { value: string };
+  serial_number: string;
+  status: string;
+}
+
+interface EquipmentData {
+  id: string;
+  attributes: EquipmentAttributes;
+}
+
+// Generic function to fetch paginated data
+const fetchPaginatedData = async (initialUrl: string) => {
+  let results: any[] = [];
+  let currentPageUrl: string | null = initialUrl;
+
+  while (currentPageUrl) {
+    try {
+      const axiosInstance = await axiosInstancePromise;
+      const response: any = await axiosInstance.get(currentPageUrl);
+      const data: any = response.data;
+
+      results = results.concat(data.data);
+
+      if (data.links && data.links.next) {
+        currentPageUrl = data.links.next.href;
+      } else {
+        currentPageUrl = null;
+      }
+    } catch (error) {
+      console.error('Error fetching paginated data:', error);
+      throw error;
+    }
+  }
+
+  return results;
+};
+
+// Function to fetch equipment data
 export const fetchEquipment = async () => {
-    try {
-      const axiosInstance = await axiosInstancePromise;
-      const response = await axiosInstance.get('/api/asset/equipment');
-      // Extract necessary fields from the response
-      console.log(response.data.data)
-      const extractedData = response.data.data.map((item: any) => ({
-        id: item.id,
-        name: item.attributes.name,
-        manufacturer: item.attributes.manufacturer,
-        model: item.attributes.model,
-        notes: item.attributes.notes ? item.attributes.notes.value : null, //value may not exist
-        serial: item.attributes.serial_number,
-        status: item.attributes.status,
-        // Add more fields as needed
-      }));
-      return extractedData;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  };
+  const results = await fetchPaginatedData('/api/asset/equipment?sort=name');
+  return results.map((item: EquipmentData) => ({
+    id: item.id,
+    name: item.attributes.name,
+    manufacturer: item.attributes.manufacturer,
+    model: item.attributes.model,
+    notes: item.attributes.notes ? item.attributes.notes.value : null,
+    serial: item.attributes.serial_number,
+    status: item.attributes.status,
+  }));
+};
 
-  export const fetchAnimals = async () => {
-    try {
-      const axiosInstance = await axiosInstancePromise;
-      const response = await axiosInstance.get('/api/asset/animal');
-      // Extract necessary fields from the response
-      console.log(response.data.data)
-      const extractedData = response.data.data.map((item: any) => ({
-        id: item.id,
-        name: item.attributes.name,
-        sex: item.attributes.sex,
-        birthdate: irishTime(item.attributes.birthdate),
-        notes: item.attributes.notes ? item.attributes.notes.value : null, //value may not exist
-        tag: item.attributes.id_tag[0].id,
-        status: item.attributes.status,
-        // Add more fields as needed
-      }));
-      return extractedData;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  };
+// Function to fetch all animals
+export const fetchAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name');
+  return results.map((item: AnimalData) => ({
+    id: item.id,
+    name: item.attributes.name,
+    sex: item.attributes.sex,
+    birthdate: justDate(item.attributes.birthdate),
+    notes: item.attributes.notes ? item.attributes.notes.value : null,
+    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
+    status: item.attributes.status,
+  }));
+};
 
+// Function to fetch active animals
+export const fetchActiveAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=active');
+  return results.map((item: AnimalData) => ({
+    id: item.id,
+    name: item.attributes.name,
+    sex: item.attributes.sex,
+    birthdate: justDate(item.attributes.birthdate),
+    notes: item.attributes.notes ? item.attributes.notes.value : null,
+    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
+    status: item.attributes.status,
+  }));
+};
 
-
-export function irishTime(isoDateString:any) {
-  const date = new Date(isoDateString);
-
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = date.getUTCFullYear();
-
-  const ieDateString = `${day}/${month}/${year}`;
-  console.log(ieDateString); // Outputs: 07/02/2024
-  return(ieDateString);
-  };
+// Function to fetch archived animals
+export const fetchArchivedAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
+  return results.map((item: AnimalData) => ({
+    id: item.id,
+    name: item.attributes.name,
+    sex: item.attributes.sex,
+    birthdate: justDate(item.attributes.birthdate),
+    notes: item.attributes.notes ? item.attributes.notes.value : null,
+    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
+    status: item.attributes.status,
+  }));
+};
