@@ -44,6 +44,17 @@ const mapSex = (sex: string): string => {
   }
 };
 
+const mapStatus = (status: string): string => {
+  switch (status) {
+    case 'active':
+      return 'In Herd';    
+    case 'archived':
+      return 'Gone';
+    default:
+      return 'Unknown';
+  }
+};
+
 // Fetch paginated data from the farmOS API.
 const fetchPaginatedData = async (initialUrl: string) => {
   let results: any[] = [];
@@ -79,7 +90,7 @@ const mapAnimalData = (item: AnimalData) => ({
   birthdate: justDate(item.attributes.birthdate),
   notes: item.attributes.notes ? item.attributes.notes.value : null,
   tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
-  status: item.attributes.status,
+  status: mapStatus(item.attributes.status),
   /*
   ##########################     IMPORTANT    ######################
   Raw data from ICBF API stored as JSON string when Asset was created via API import.
@@ -109,13 +120,13 @@ export const fetchAnimals = async () => {
   return results.map(mapAnimalData);
 };
 
-// Fetch animals that are currently active.
+// Fetch animals that are currently active. (All animals that are currently on the farm.)
 export const fetchActiveAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=active');
   return results.map(mapAnimalData);
 };
 
-// Fetch animals that have been archived.
+// Fetch animals that have been archived. (All animals that have left the farm.)
 export const fetchArchivedAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
   return results.map(mapAnimalData);
@@ -135,4 +146,22 @@ export const fetchSoldAnimals = async () => {
   const animalsDied = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes('death_date'));
   return animalsDied.map(mapAnimalData);
+};
+
+// Fetch animals that have been purchased. (Currently, this is determined by the presence of a 'total_movements' in the animal's data field.)
+export const fetchPurchasedAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name');
+  const animalsDied = results
+    .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes(',"total_movements":0,'));
+    console.log(results);
+    return animalsDied.map(mapAnimalData);
+};
+
+// Fetch animals that have been born. (Currently, this is determined by the absence of a 'total_movements' in the animal's data field.)
+export const fetchHomeBredAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name');
+  const animalsDied = results
+    .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && animal.attributes.data.includes(',"total_movements":0,'));
+    console.log(results);
+    return animalsDied.map(mapAnimalData);
 };

@@ -33,8 +33,8 @@ export const appPages: AppPage[] = [
     mdiIcon: mdiBarley,
   },
   {
-    title: 'Machinery',
-    url: '/machinery',
+    title: 'Equipment',
+    url: '/equipment',
     mdiIcon: mdiTractor,
   },
   {

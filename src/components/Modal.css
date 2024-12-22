@@ -1,0 +1,8 @@
+.custom-modal {
+    --height: 95vh; /* 95% of the viewport height */
+}
+
+.custom-modal-content {
+    height: 100%; /* Ensure content takes full height of the modal */
+    overflow-y: auto; /* Enable vertical scrolling for the content */
+}

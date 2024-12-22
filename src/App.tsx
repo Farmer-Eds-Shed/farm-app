@@ -7,11 +7,10 @@ import LivestockPage from './pages/LivestockPage';
 import VeterinaryPage from './pages/VeterinaryPage';
 import FeedPage from './pages/FeedPage';
 import HarvestPage from './pages/HarvestPage';
-import MachineryPage from './pages/MachineryPage';
+import EquipmentPage from './pages/EquipmentPage';
 import DiaryPage from './pages/DiaryPage';
 import SettingsPage from './pages/SettingsPage';
-import OverviewTab from './pages/LivestockTabs/LivestockPurchased';
-import DetailsTab from './pages/LivestockTabs/LivestockActive';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -61,7 +60,7 @@ const App: React.FC = () => {
             <Route path="/veterinary" render={() => <VeterinaryPage />} exact={true} />
             <Route path="/feed" render={() => <FeedPage />} exact={true} />
             <Route path="/harvest" render={() => <HarvestPage />} exact={true} />
-            <Route path="/machinery" render={() => <MachineryPage />} exact={true} />
+            <Route path="/equipment" render={() => <EquipmentPage />} exact={true} />
             <Route path="/diary" render={() => <DiaryPage />} exact={true} />
             <Route path="/settings" render={() => <SettingsPage />} exact={true} />          
           </IonRouterOutlet>

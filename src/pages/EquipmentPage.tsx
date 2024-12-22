@@ -50,7 +50,7 @@ const EquipmentPage: React.FC = () => {
         {loading ? (
           <Spinner loading={loading} />
         ) : (
-          <Table rowData={rowData} colDefs={colDefs} />
+          <Table rowData={rowData} colDefs={colDefs} loading={loading} onCellClicked={() => {}} />
         )}
       </IonContent>
     </IonPage>

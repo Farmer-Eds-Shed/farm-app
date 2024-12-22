@@ -6,5 +6,5 @@ export const livestockColDefs = [
   { field: 'sex', sortable: true, filter: true },
   { field: 'birthdate', sortable: true, filter: true, comparator: dateComparator },
   { field: 'tag', sortable: true, filter: true },
-  { field: 'notes', sortable: true, filter: true },
+  { field: 'status', sortable: true, filter: true },
 ];
