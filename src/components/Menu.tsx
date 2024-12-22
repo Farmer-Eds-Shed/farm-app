@@ -15,7 +15,7 @@ import { bookmarkOutline } from 'ionicons/icons';
 import './Menu.css';
 
 import Icon from '@mdi/react';
-import { appPages } from './MenuList'; // Import the appPages array
+import { appPages } from '../constants/MenuList'; // Import the appPages array
 
 
 interface AppPage {

@@ -30,6 +30,18 @@ interface EquipmentData {
   attributes: EquipmentAttributes;
 }
 
+// Function to map sex from 'M'/'F' to 'Male'/'Female'
+const mapSex = (sex: string): string => {
+  switch (sex) {
+    case 'M':
+      return 'Male';
+    case 'F':
+      return 'Female';
+    default:
+      return 'Unknown';
+  }
+};
+
 // Generic function to fetch paginated data
 const fetchPaginatedData = async (initialUrl: string) => {
   let results: any[] = [];
@@ -77,7 +89,7 @@ export const fetchAnimals = async () => {
   return results.map((item: AnimalData) => ({
     id: item.id,
     name: item.attributes.name,
-    sex: item.attributes.sex,
+    sex: mapSex(item.attributes.sex),
     birthdate: justDate(item.attributes.birthdate),
     notes: item.attributes.notes ? item.attributes.notes.value : null,
     tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
@@ -91,7 +103,7 @@ export const fetchActiveAnimals = async () => {
   return results.map((item: AnimalData) => ({
     id: item.id,
     name: item.attributes.name,
-    sex: item.attributes.sex,
+    sex: mapSex(item.attributes.sex),
     birthdate: justDate(item.attributes.birthdate),
     notes: item.attributes.notes ? item.attributes.notes.value : null,
     tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
@@ -105,7 +117,7 @@ export const fetchArchivedAnimals = async () => {
   return results.map((item: AnimalData) => ({
     id: item.id,
     name: item.attributes.name,
-    sex: item.attributes.sex,
+    sex: mapSex(item.attributes.sex),
     birthdate: justDate(item.attributes.birthdate),
     notes: item.attributes.notes ? item.attributes.notes.value : null,
     tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',

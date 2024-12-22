@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { fetchAnimals } from '../../services/dataService';
 import { ClipLoader } from 'react-spinners'; // Import the spinner
 import Table from '../../components/Table'; // Import the new table component
-import { dateComparator } from '../../services/dateService';
+import { livestockColDefs } from '../../constants/ColumnDefinitions';
+
 
 const OverviewTab: React.FC = () => {
     const [rowData, setRowData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const colDefs = livestockColDefs;
   
     useEffect(() => {
       const tableData = async () => {
@@ -23,13 +25,6 @@ const OverviewTab: React.FC = () => {
       tableData();
     }, []);
   
-    const [colDefs] = useState([
-      { field: 'name', sortable: true, filter: true },
-      { field: 'sex', sortable: true, filter: true },
-      { field: 'birthdate', sortable: true, filter: true, comparator: dateComparator },
-      { field: 'tag', sortable: true, filter: true },
-      { field: 'notes', sortable: true, filter: true },
-    ]);
 
     return (
 
