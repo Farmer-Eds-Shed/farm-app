@@ -1,7 +1,8 @@
+// This file contains functions to fetch data from the farmOS API.
 import axiosInstancePromise from '../oauth2/request';
 import { justDate } from './dateService';
 
-// Define the structure of the expected data using TypeScript interfaces
+// Define the types of the data returned by the farmOS API.
 interface AnimalAttributes {
   name: string;
   sex: string;
@@ -9,6 +10,7 @@ interface AnimalAttributes {
   notes?: { value: string };
   id_tag?: { id: string }[];
   status: string;
+  data: object;
 }
 
 interface AnimalData {
@@ -30,7 +32,7 @@ interface EquipmentData {
   attributes: EquipmentAttributes;
 }
 
-// Function to map sex from 'M'/'F' to 'Male'/'Female'
+// Map the full word
 const mapSex = (sex: string): string => {
   switch (sex) {
     case 'M':
@@ -42,7 +44,7 @@ const mapSex = (sex: string): string => {
   }
 };
 
-// Generic function to fetch paginated data
+// Fetch paginated data from the farmOS API.
 const fetchPaginatedData = async (initialUrl: string) => {
   let results: any[] = [];
   let currentPageUrl: string | null = initialUrl;
@@ -69,7 +71,25 @@ const fetchPaginatedData = async (initialUrl: string) => {
   return results;
 };
 
-// Function to fetch equipment data
+// Map animal data to a more user-friendly format.
+const mapAnimalData = (item: AnimalData) => ({
+  id: item.id,
+  name: item.attributes.name,
+  sex: mapSex(item.attributes.sex),
+  birthdate: justDate(item.attributes.birthdate),
+  notes: item.attributes.notes ? item.attributes.notes.value : null,
+  tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
+  status: item.attributes.status,
+  /*
+  ##########################     IMPORTANT    ######################
+  Raw data from ICBF API stored as JSON string when Asset was created via API import.
+  This data may be used to display additional information about the animal.
+  This data is unlikely to be available or relevant in most farmOS instances.
+  */
+  data: item.attributes.data ? JSON.parse(item.attributes.data as unknown as string) : null, 
+});
+
+// Fetch all equipment.
 export const fetchEquipment = async () => {
   const results = await fetchPaginatedData('/api/asset/equipment?sort=name');
   return results.map((item: EquipmentData) => ({
@@ -83,44 +103,36 @@ export const fetchEquipment = async () => {
   }));
 };
 
-// Function to fetch all animals
+// Fetch all animals.
 export const fetchAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name');
-  return results.map((item: AnimalData) => ({
-    id: item.id,
-    name: item.attributes.name,
-    sex: mapSex(item.attributes.sex),
-    birthdate: justDate(item.attributes.birthdate),
-    notes: item.attributes.notes ? item.attributes.notes.value : null,
-    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
-    status: item.attributes.status,
-  }));
+  return results.map(mapAnimalData);
 };
 
-// Function to fetch active animals
+// Fetch animals that are currently active.
 export const fetchActiveAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=active');
-  return results.map((item: AnimalData) => ({
-    id: item.id,
-    name: item.attributes.name,
-    sex: mapSex(item.attributes.sex),
-    birthdate: justDate(item.attributes.birthdate),
-    notes: item.attributes.notes ? item.attributes.notes.value : null,
-    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
-    status: item.attributes.status,
-  }));
+  return results.map(mapAnimalData);
 };
 
-// Function to fetch archived animals
+// Fetch animals that have been archived.
 export const fetchArchivedAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
-  return results.map((item: AnimalData) => ({
-    id: item.id,
-    name: item.attributes.name,
-    sex: mapSex(item.attributes.sex),
-    birthdate: justDate(item.attributes.birthdate),
-    notes: item.attributes.notes ? item.attributes.notes.value : null,
-    tag: item.attributes.id_tag && item.attributes.id_tag.length > 0 ? item.attributes.id_tag[0].id : 'unknown',
-    status: item.attributes.status,
-  }));
+  return results.map(mapAnimalData);
+};
+
+// Fetch animals that have died. (Currently, this is determined by the presence of a 'death_date' in the animal's data field.)
+export const fetchDeadAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
+  const animalsDied = results
+    .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && animal.attributes.data.includes('death_date'));
+  return animalsDied.map(mapAnimalData);
+};
+
+// Fetch animals that have been sold. (Currently, this is determined by the absence of a 'death_date' in the animal's data field.)
+export const fetchSoldAnimals = async () => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
+  const animalsDied = results
+    .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes('death_date'));
+  return animalsDied.map(mapAnimalData);
 };

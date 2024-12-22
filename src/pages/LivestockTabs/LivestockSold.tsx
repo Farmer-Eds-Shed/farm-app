@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useFetchData from '../../hooks/useFetchData';
-import { fetchArchivedAnimals } from '../../services/dataService';
+import { fetchSoldAnimals } from '../../services/dataService';
 import Table from '../../components/Table';
 import { livestockColDefs } from '../../constants/ColumnDefinitions';
 import Modal from '../../components/Modal';
 
 const SoldTab: React.FC = () => {
-    const { data, loading } = useFetchData(fetchArchivedAnimals);
+    const { data, loading } = useFetchData(fetchSoldAnimals);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [cellData, setCellData] = useState<any>(null);
