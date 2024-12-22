@@ -23,7 +23,6 @@ export function LoginForm({farmUrl}:any) {
       });
     
 
-    
       //farmOS Auth0 token request
     const authenticate = async (data: any) => {
       const params = new URLSearchParams();
@@ -35,7 +34,7 @@ export function LoginForm({farmUrl}:any) {
       params.append("scope", "farm_manager");
     
       try {  
-      const response = await fetch(farmUrl + "/oauth/token", {
+      const response = await fetch(data.url + "/oauth/token", {
         method: "POST",
         cache: 'no-cache',
         body: params,

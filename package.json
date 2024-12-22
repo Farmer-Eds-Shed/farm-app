@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ag-grid-community/react": "^32.3.3",
     "@capacitor/android": "^6.1.2",
     "@capacitor/app": "6.0.1",
     "@capacitor/core": "6.1.2",
@@ -25,6 +26,7 @@
     "@mdi/react": "^1.6.1",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
+    "ag-grid-react": "^32.3.3",
     "axios": "^1.7.7",
     "ionicons": "^7.0.0",
     "mdi": "^2.2.43",
