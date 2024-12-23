@@ -9,9 +9,10 @@ interface CustomModalProps {
     isOpen: boolean;
     onClose: () => void;
     cellData: any;
+    title: string;
 }
 
-const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData }) => {
+const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title }) => {
     const renderDetails = (data: any) => {
         if (!data) return null; // Ensure data is not undefined or null
 
@@ -76,7 +77,7 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData }) => {
             <IonContent>
                 <IonCard>
                     <IonCardHeader>
-                        <IonTitle>Animal: {cellData?.tag || 'Unknown'}</IonTitle>
+                        <IonTitle>{title}</IonTitle>
                     </IonCardHeader>
                     <IonCardContent className="custom-modal-content">
                         {renderDetails(cellData)}

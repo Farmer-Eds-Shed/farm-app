@@ -53,7 +53,7 @@ const EquipmentPage: React.FC = () => {
             onSelectionChanged={onSelectionChanged}
             onCellClicked={handleCellClick}
           />
-          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} />
+          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} title={`Equipment: ${cellData?.name ?? 'Unknown'}`}/>
         </div>
       </IonContent>
     </IonPage>
