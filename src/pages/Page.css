@@ -86,6 +86,12 @@
   border: 1px solid dimgray;
   border-radius: 4px
 }
+
+.toolbar-icons {
+  border: 1px solid dimgray;
+  color: dimgray;
+  border-radius: 50px
+}
   
   /* Responsive styling */
   @media (max-width: 600px) {

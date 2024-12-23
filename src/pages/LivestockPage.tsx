@@ -63,8 +63,8 @@ const LivestockPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonButtons slot="start">
-          <IonButton onClick={handleShowSelectedRows}>
-            <IonIcon icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
+          <IonButton  onClick={handleShowSelectedRows}>
+            <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
             </IonButton>
             <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
           </IonButtons>
