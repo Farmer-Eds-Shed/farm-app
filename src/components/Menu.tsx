@@ -40,7 +40,13 @@ const Menu: React.FC = () => {
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                <IonItem
+                  className={location.pathname === appPage.url ? 'selected' : ''}
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                  >
                   <Icon path={appPage.mdiIcon} size={1} className="menu-icons" />
                   <IonLabel>&nbsp;&nbsp;{appPage.title}</IonLabel>
                 </IonItem>

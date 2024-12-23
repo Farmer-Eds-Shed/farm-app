@@ -52,13 +52,13 @@ const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionCha
             ) : (
                 <AgGridReact
                     theme={myTheme}
-					rowData={rowData}
-					columnDefs={colDefs}
-					rowSelection={{mode: 'multiRow'}}
-					pagination={true}
-					paginationPageSize={50}
-					onSelectionChanged={onSelectionChanged}
-          onCellClicked={params => onCellClicked(params.data)} // Pass cell data to the handler
+					          rowData={rowData}
+					          columnDefs={colDefs}
+					          rowSelection={{mode: 'multiRow'}}
+					          pagination={true}
+					          paginationPageSize={50}
+					          onSelectionChanged={onSelectionChanged}
+                    onCellClicked={params => onCellClicked(params.data)} // Pass cell data to the handler
                 />
             )}
         </div>

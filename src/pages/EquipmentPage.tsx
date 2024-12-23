@@ -1,40 +1,38 @@
+import React, { useState, useEffect } from 'react';
+import useFetchData from '../hooks/useFetchData';
+import { fetchEquipment } from '../services/dataService';
+import Table from '../components/Table';
+import { equipmentColDefs } from '../constants/ColumnDefinitions';
+import Modal from '../components/Modal';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Page.css';
-import { useEffect, useState} from "react";
-import { fetchEquipment } from '../services/dataService';
-import Spinner from '../components/Spinner'; // Import the Spinner component
-import Table from '../components/Table'; // Import the new table component
 
 const EquipmentPage: React.FC = () => {
+  const { data, loading } = useFetchData(fetchEquipment);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [cellData, setCellData] = useState<any>(null);
 
-  const [rowData, setRowData] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const onSelectionChanged = (event: any) => {
+    setSelectedRows(event.api.getSelectedRows());
+  };
+
+  const handleCellClick = (data: any) => {
+    setCellData(data);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCellData(null);
+  };
 
   useEffect(() => {
-    const tableData = async () => {
-      try {
-        const data = await fetchEquipment();
-        setRowData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      }
-    };
+    if (selectedRows.length > 0) {
+      console.log('Selected Rows:', selectedRows);
+    }
+  }, [selectedRows]);
 
-    tableData();
-  }, []);
-  
-  // Column Definitions: Defines the columns to be displayed.
-  const [colDefs, setColDefs] = useState([
-    { field: "manufacturer", sortable: true, filter: true  },
-    { field: "model", sortable: true, filter: true  },
-    { field: "name", sortable: true, filter: true  },
-    { field: "serial", sortable: true, filter: true  },
-    { field: "notes", sortable: true, filter: true  },
-
-  ]);
-  
   return (
     <IonPage>
       <IonHeader>
@@ -47,11 +45,16 @@ const EquipmentPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {loading ? (
-          <Spinner loading={loading} />
-        ) : (
-          <Table rowData={rowData} colDefs={colDefs} loading={loading} onCellClicked={() => {}} />
-        )}
+        <div style={{ height: '100%', width: '100%' }}>
+          <Table
+            rowData={data}
+            colDefs={equipmentColDefs}
+            loading={loading}
+            onSelectionChanged={onSelectionChanged}
+            onCellClicked={handleCellClick}
+          />
+          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} />
+        </div>
       </IonContent>
     </IonPage>
   );

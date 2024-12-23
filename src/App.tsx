@@ -55,15 +55,15 @@ const App: React.FC = () => {
             <Route path="/" exact={true}>
               <Redirect to="/home" />
             </Route>
-            <Route path="/home" render={() => <HomePage />} exact={true} />
-            <Route path="/livestock" render={() => <LivestockPage />} exact={true} />
-            <Route path="/veterinary" render={() => <VeterinaryPage />} exact={true} />
-            <Route path="/feed" render={() => <FeedPage />} exact={true} />
-            <Route path="/harvest" render={() => <HarvestPage />} exact={true} />
-            <Route path="/equipment" render={() => <EquipmentPage />} exact={true} />
-            <Route path="/diary" render={() => <DiaryPage />} exact={true} />
-            <Route path="/settings" render={() => <SettingsPage />} exact={true} />          
-          </IonRouterOutlet>
+            <Route path="/home" exact={true} component={HomePage} />
+            <Route path="/livestock" exact={true} component={LivestockPage} />
+            <Route path="/veterinary" exact={true} component={VeterinaryPage} />
+            <Route path="/feed" exact={true} component={FeedPage} />
+            <Route path="/harvest" exact={true} component={HarvestPage} />
+            <Route path="/equipment" exact={true} component={EquipmentPage} />
+            <Route path="/diary" exact={true} component={DiaryPage} />
+            <Route path="/settings" exact={true} component={SettingsPage} />
+</IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>
