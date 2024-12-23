@@ -81,6 +81,18 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData }) => {
                     <IonLabel>Arrive Date</IonLabel>
                     <div>{data.arrive_date}</div>
                 </IonItem>
+                {data.death_date && (
+                <IonItem>
+                    <IonLabel>Death Date</IonLabel>
+                    <div>{data.death_date}</div>
+                </IonItem>
+                )}
+                {data.depart_date && (
+                <IonItem>
+                    <IonLabel>Depart Date</IonLabel>
+                    <div>{data.depart_date}</div>
+                </IonItem>
+                )}
                 <IonItem>
                     <IonLabel>Contract Rearing</IonLabel>
                     <div>{data.contract_rearing}</div>
