@@ -13,8 +13,13 @@ interface CustomModalProps {
 }
 
 const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title }) => {
+    const formatLabel = (label: string) => {
+        // Replace underscores with spaces and capitalize the first letter of each word
+        return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+    };
+
     const renderDetails = (data: any) => {
-        if (!data) return null; // Ensure data is not undefined or null
+        if (!data) return null;
 
         // Filter out 'data' and 'id' fields
         const filteredKeys = Object.keys(data).filter(key => key !== 'data' && key !== 'id');
@@ -23,7 +28,7 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
             <IonList>
                 {filteredKeys.map((key, index) => (
                     <IonItem key={index}>
-                        <IonLabel>{key}</IonLabel>
+                        <IonLabel>{formatLabel(key)}</IonLabel>
                         <div>
                             {typeof data[key] === 'object' && data[key] !== null
                                 ? Array.isArray(data[key])
@@ -50,7 +55,7 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
                 <IonTitle>Additional Details</IonTitle>
                 {filteredKeys.map((key, index) => (
                     <IonItem key={index}>
-                        <IonLabel>{key}</IonLabel>
+                        <IonLabel>{formatLabel(key)}</IonLabel>
                         <div>
                             {typeof data[key] === 'object' && data[key] !== null
                                 ? Array.isArray(data[key])

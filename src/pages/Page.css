@@ -82,7 +82,10 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind's blue-500 with transparency */
 }
 
-
+.toolbar-buttons {
+  border: 1px solid dimgray;
+  border-radius: 4px
+}
   
   /* Responsive styling */
   @media (max-width: 600px) {
