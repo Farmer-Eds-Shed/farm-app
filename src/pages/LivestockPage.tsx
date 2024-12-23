@@ -5,18 +5,48 @@ import {
   IonMenuButton,
   IonPage,
   IonToolbar,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
+  IonButton,
 } from '@ionic/react';
 import { useState } from 'react';
-import PurchasedTab from './LivestockTabs/LivestockPurchased';
-import ActiveTab from './LivestockTabs/LivestockActive';
-import SoldTab from './LivestockTabs/LivestockSold';
-import MortalityTab from './LivestockTabs/LivestockMortality';
+import useFetchData from '../hooks/useFetchData';
+import { fetchActiveAnimals, fetchPurchasedAnimals, fetchSoldAnimals, fetchDeadAnimals } from '../services/dataService';
+import Table from '../components/Table';
+import { livestockColDefs } from '../constants/ColumnDefinitions';
+import Modal from '../components/Modal';
+import './Page.css'; 
 
 const LivestockPage: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState<'purchased' | 'active' | 'sold' | 'mortality'>('active');
+  const [selectedTable, setSelectedTable] = useState<'purchased' | 'active' | 'sold' | 'mortality'>('active');
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [cellData, setCellData] = useState<any>(null);
+
+  const handleBatchLog = () => {
+    console.log('Selected Cells:', selectedRows);
+  };
+
+  const onSelectionChanged = (event: any) => {
+    setSelectedRows(event.api.getSelectedRows());
+};
+
+  const handleCellClick = (data: any) => {
+    setCellData(data);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCellData(null);
+  };
+
+  const dataFetchers = {
+    active: fetchActiveAnimals,
+    purchased: fetchPurchasedAnimals,
+    sold: fetchSoldAnimals,
+    mortality: fetchDeadAnimals,
+  };
+
+  const { data, loading } = useFetchData(dataFetchers[selectedTable]);
 
   return (
     <IonPage>
@@ -25,29 +55,35 @@ const LivestockPage: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonSegment value={selectedTab} onIonChange={e => setSelectedTab(e.detail.value as 'purchased' | 'active' | 'sold'| 'mortality')}>
-          <IonSegmentButton value="active">
-            <IonLabel>Active</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="purchased">
-            <IonLabel>Purchased</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="sold">
-            <IonLabel>Sold</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="mortality">
-            <IonLabel>Mortality</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
+          <div className="toolbar-center">
+            <select
+              className="custom-dropdown"
+              value={selectedTable}
+              onChange={e => setSelectedTable(e.target.value as 'purchased' | 'active' | 'sold' | 'mortality')}
+            >
+              <option value="active">Active</option>
+              <option value="purchased">Purchased</option>
+              <option value="sold">Sold</option>
+              <option value="mortality">Mortality</option>
+            </select>
+          </div>
+          <IonButtons slot="end">
+            <IonButton onClick={handleBatchLog}>Batch Log</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {selectedTab === 'active' && <ActiveTab />}
-        {selectedTab === 'purchased' && <PurchasedTab />}
-        {selectedTab === 'sold' && <SoldTab />}
-        {selectedTab === 'mortality' && <MortalityTab />}
-        
+        <div style={{ height: '100%', width: '100%' }}>
+          <Table
+            rowData={data}
+            colDefs={livestockColDefs}
+            loading={loading}
+            onSelectionChanged={onSelectionChanged}
+            onCellClicked={handleCellClick}
+          />
+          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} title={`Animal: ${cellData?.tag ?? 'Unknown'}`}/>
+        </div>
       </IonContent>
     </IonPage>
   );

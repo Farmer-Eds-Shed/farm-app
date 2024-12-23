@@ -58,6 +58,30 @@
     color: black; /* Change the icon color to blue on hover */
   }
 
+  /* Center the dropdown in the toolbar */
+.toolbar-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style for the dropdown */
+.custom-dropdown {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+  width: 200px;
+}
+
+.custom-dropdown:focus {
+  border-color: #3b82f6; /* Tailwind's blue-500 */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind's blue-500 with transparency */
+}
+
 
   
   /* Responsive styling */
