@@ -60,27 +60,29 @@ const LivestockPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonButtons slot="start">
-            <IonButton onClick={handleShowSelectedRows}>
-              <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
-            </IonButton>
-            <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
-            <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, selectedTable)}>Export CSV</IonButton> {/* CSV Export Button */}
-          </IonButtons>
-          <div className="toolbar-center">
-            <select
-              className="custom-dropdown"
-              value={selectedTable}
-              onChange={e => setSelectedTable(e.target.value as 'purchased' | 'active' | 'sold' | 'mortality')}
-            >
-              <option value="active">Animals in Herd</option>
-              <option value="purchased">Animals Purchased</option>
-              <option value="sold">Animals Sold</option>
-              <option value="mortality">Mortality Report</option>
-            </select>
+          <div className="toolbar-buttons-container">
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonButtons slot="start">
+              <IonButton onClick={handleShowSelectedRows}>
+                <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
+              </IonButton>
+              <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
+              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, selectedTable)}>Export CSV</IonButton>
+            </IonButtons>
+            <div className="toolbar-center">
+              <select
+                className="custom-dropdown"
+                value={selectedTable}
+                onChange={e => setSelectedTable(e.target.value as 'purchased' | 'active' | 'sold' | 'mortality')}
+              >
+                <option value="active">Animals in Herd</option>
+                <option value="purchased">Animals Purchased</option>
+                <option value="sold">Animals Sold</option>
+                <option value="mortality">Mortality Report</option>
+              </select>
+            </div>
           </div>
         </IonToolbar>
       </IonHeader>
@@ -93,7 +95,7 @@ const LivestockPage: React.FC = () => {
             loading={loading}
             onSelectionChanged={onSelectionChanged}
             onCellClicked={handleCellClick}
-            selectedRows={selectedRows}  // Pass selected rows to the table
+            selectedRows={selectedRows}
             isExternalFilterPresent={isShowingSelectedRows}
           />
           <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} title={`Animal: ${cellData?.tag ?? 'Unknown'}`}/>

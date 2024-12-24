@@ -1,5 +1,5 @@
 #container {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -51,22 +51,14 @@
   }
 
   .page-icon {
-    color: dimgray; /* Set the icon color to black */
+    color: dimgray; 
   }
 
   .icon-container:hover .page-icon {
-    color: black; /* Change the icon color to blue on hover */
+    color: black; 
   }
 
-  /* Center the dropdown in the toolbar */
-.toolbar-center {
-  flex: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Style for the dropdown */
+ /* Style for the dropdown */
 .custom-dropdown {
   background-color: #fff;
   border: 1px solid #ccc;
@@ -84,7 +76,7 @@
 
 .toolbar-buttons {
   border: 1px solid dimgray;
-  border-radius: 4px
+  border-radius: 4px; 
 }
 
 .toolbar-icons {
@@ -92,10 +84,63 @@
   color: dimgray;
   border-radius: 50px
 }
-  
-  /* Responsive styling */
-  @media (max-width: 600px) {
-    .ag-theme-quartz {
-      height: 300px; /* Adjust height for smaller screens */
-    }
+
+/* General styles */
+.toolbar-buttons-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;  /* Allow wrapping of elements */
+}
+
+.toolbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.custom-dropdown {
+  margin-left: 10px; /* Adjust margin as needed */
+}
+
+/* Styles for mobile viewports */
+@media (max-width: 768px) {
+  .toolbar-buttons-container {
+    flex-direction: row;
+    align-items: center;
   }
+
+  .toolbar-center {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .custom-dropdown {
+    min-width: 200px;
+    margin-top: 10px; /* Adjust as needed */
+    margin-left: 0;
+  }
+
+}
+
+/* Styles for larger screens */
+@media (min-width: 769px) {
+  .toolbar-buttons-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .toolbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .custom-dropdown {
+    margin-left: 10px; /* Adjust margin as needed */
+    min-width: 250px;
+  }
+}
