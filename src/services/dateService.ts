@@ -1,3 +1,5 @@
+import { IDateFilterParams } from 'ag-grid-community';
+
 // DATE COMPARATOR FOR SORTING
 export function dateComparator(date1:any, date2:any) {
     var date1Number = _monthToNum(date1);
@@ -30,6 +32,38 @@ export function dateComparator(date1:any, date2:any) {
     // 29/08/2004 => 20040829
     return result;
   }
+
+  const today = new Date();
+const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+export const filterParams: IDateFilterParams = {
+  minValidDate: "2000-01-01",
+  maxValidDate: tomorrow,
+  comparator: (filterLocalDateAtMidnight: Date, cellValue: string) => {
+    const dateAsString = cellValue;
+    if (dateAsString == null) return -1;
+    const dateParts = dateAsString.split("/");
+    const cellDate = new Date(
+      Number(dateParts[2]),
+      Number(dateParts[1]) - 1,
+      Number(dateParts[0]),
+    );
+
+    if (filterLocalDateAtMidnight.getTime() === cellDate.getTime()) {
+      return 0;
+    }
+
+    if (cellDate < filterLocalDateAtMidnight) {
+      return -1;
+    }
+
+    if (cellDate > filterLocalDateAtMidnight) {
+      return 1;
+    }
+    return 0;
+  },
+};
+
 
 // utc timestamp to date
   export function justDate(isoDateString:any) {
