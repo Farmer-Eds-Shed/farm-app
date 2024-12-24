@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useFetchData from '../hooks/useFetchData';
 import { fetchEquipment } from '../services/dataService';
+import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { equipmentColDefs } from '../constants/ColumnDefinitions';
 import Modal from '../components/Modal';
 import { eye, eyeOff } from 'ionicons/icons';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonButton, IonIcon } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonToolbar, IonButton, IonIcon } from '@ionic/react';
 import './Page.css';
 
 const EquipmentPage: React.FC = () => {
@@ -47,16 +48,23 @@ const EquipmentPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+        <div className="toolbar-buttons-container">
         <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonButtons slot="start">
-          <IonButton  onClick={handleShowSelectedRows}>
-            <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
-            </IonButton>
-            <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
-          </IonButtons>
-          <IonTitle>Equipment</IonTitle>
+          <IonButton onClick={handleShowSelectedRows}>
+                <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
+              </IonButton>
+              <IonButton className='toolbar-buttons' onClick={handleBatchLog}>
+                New Event
+              </IonButton>
+              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, "null")}>
+                CSV Export
+              </IonButton>
+              <div className="toolbar-center">
+                
+              </div>
+          </div>      
         </IonToolbar>
       </IonHeader>
 

@@ -9,7 +9,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { useState } from 'react';
-import { eye, eyeOff } from 'ionicons/icons';
+import { eye, eyeOff, download, add } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
 import { fetchActiveAnimals, fetchPurchasedAnimals, fetchSoldAnimals, fetchDeadAnimals } from '../services/dataService';
 import { handleExportCSV } from '../services/exportService';
@@ -68,8 +68,12 @@ const LivestockPage: React.FC = () => {
               <IonButton onClick={handleShowSelectedRows}>
                 <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
               </IonButton>
-              <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
-              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, selectedTable)}>Export CSV</IonButton>
+              <IonButton className='toolbar-buttons' onClick={handleBatchLog}>
+                New Event
+              </IonButton>
+              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, selectedTable)}>
+                CSV Export
+              </IonButton>
             </IonButtons>
             <div className="toolbar-center">
               <select
