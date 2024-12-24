@@ -12,10 +12,11 @@ import { useState } from 'react';
 import { eye, eyeOff } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
 import { fetchActiveAnimals, fetchPurchasedAnimals, fetchSoldAnimals, fetchDeadAnimals } from '../services/dataService';
+import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { livestockColDefs } from '../constants/ColumnDefinitions';
 import Modal from '../components/Modal';
-import './Page.css'; 
+import './Page.css';
 
 const LivestockPage: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<'purchased' | 'active' | 'sold' | 'mortality'>('active');
@@ -63,10 +64,11 @@ const LivestockPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonButtons slot="start">
-          <IonButton  onClick={handleShowSelectedRows}>
-            <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
+            <IonButton onClick={handleShowSelectedRows}>
+              <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
             </IonButton>
             <IonButton className='toolbar-buttons' onClick={handleBatchLog}>Batch Log</IonButton>
+            <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, selectedTable)}>Export CSV</IonButton> {/* CSV Export Button */}
           </IonButtons>
           <div className="toolbar-center">
             <select

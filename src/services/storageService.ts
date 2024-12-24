@@ -1,3 +1,4 @@
+// Code for storage service
 import { Storage } from '@ionic/storage';
 
 class StorageService {
