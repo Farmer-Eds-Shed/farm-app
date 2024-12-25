@@ -113,7 +113,7 @@ const mapAnimalData = (item: AnimalData) => ({
 });
 
 // Map log data to a more user-friendly format.
-const mapActivityLogData = (item: ActivityLogData) => ({
+const mapLogData = (item: ActivityLogData) => ({
   id: item.id,
   name: item.attributes.name,
   date: justDate(item.attributes.timestamp),
@@ -191,5 +191,20 @@ export const fetchHomeBredAnimals = async () => {
 // Fetch activity logs for a specific animal.
 export const fetchActivityLogs = async (id:any) => {
   const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
-    return results.map(mapActivityLogData);
+    return results.map(mapLogData);
+};
+
+export const fetchBirthLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/birth?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
+};
+
+export const fetchObservationLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/observation?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
+};
+
+export const fetchMedicalLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/medical?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
 };
