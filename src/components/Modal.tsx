@@ -71,6 +71,29 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
         );
     };
 
+    const renderTable = () => {
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                    </tr>
+                    <tr>
+                        <td>Data 3</td>
+                        <td>Data 4</td>
+                    </tr>
+                </tbody>
+            </table>
+        );
+    };
+
     return (
         <IonModal isOpen={isOpen} onDidDismiss={onClose} className="custom-modal">
             <IonHeader>
@@ -85,8 +108,15 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
                         <IonTitle>{title}</IonTitle>
                     </IonCardHeader>
                     <IonCardContent className="custom-modal-content">
-                        {renderDetails(cellData)}
-                        {renderAdditionalData(cellData?.data)}
+                        <div className="modal-content">
+                            <div className="modal-column">
+                                {renderDetails(cellData)}
+                                {renderAdditionalData(cellData?.data)}
+                            </div>
+                            <div className="modal-column">
+                                {renderTable()}
+                            </div>
+                        </div>
                     </IonCardContent>
                 </IonCard>
             </IonContent>

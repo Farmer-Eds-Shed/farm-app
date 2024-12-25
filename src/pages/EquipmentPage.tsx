@@ -48,23 +48,22 @@ const EquipmentPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-        <div className="toolbar-buttons-container">
-        <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonButton onClick={handleShowSelectedRows}>
+          <div className="toolbar-buttons-container">
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonButtons slot="start">
+              <IonButton onClick={handleShowSelectedRows}>
                 <IonIcon className='toolbar-icons' icon={isShowingSelectedRows ? eyeOff : eye} slot="icon-only" />
               </IonButton>
               <IonButton className='toolbar-buttons' onClick={handleBatchLog}>
                 New Event
               </IonButton>
-              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, "null")}>
+              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, "equipment")}>
                 CSV Export
               </IonButton>
-              <div className="toolbar-center">
-                
-              </div>
-          </div>      
+            </IonButtons>
+          </div>
         </IonToolbar>
       </IonHeader>
 

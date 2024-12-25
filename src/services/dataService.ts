@@ -32,6 +32,18 @@ interface EquipmentData {
   attributes: EquipmentAttributes;
 }
 
+interface ActivityLogData {
+  id: string;
+  attributes: ActivityAttributes;
+}
+
+interface ActivityAttributes {
+  name: string;
+  timestamp: string;
+  notes?: { value: string };
+  status: string;
+}
+
 // Map the full word
 const mapSex = (sex: string): string => {
   switch (sex) {
@@ -100,6 +112,15 @@ const mapAnimalData = (item: AnimalData) => ({
   data: item.attributes.data ? JSON.parse(item.attributes.data as unknown as string) : null, 
 });
 
+// Map log data to a more user-friendly format.
+const mapActivityLogData = (item: ActivityLogData) => ({
+  id: item.id,
+  name: item.attributes.name,
+  date: justDate(item.attributes.timestamp),
+  notes: item.attributes.notes ? item.attributes.notes.value : null,
+  status: mapStatus(item.attributes.status),
+});
+
 // Fetch all equipment.
 export const fetchEquipment = async () => {
   const results = await fetchPaginatedData('/api/asset/equipment?sort=name');
@@ -143,25 +164,32 @@ export const fetchDeadAnimals = async () => {
 // Fetch animals that have been sold. (Currently, this is determined by the absence of a 'death_date' in the animal's data field.)
 export const fetchSoldAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[status]=archived');
-  const animalsDied = results
+  const animalsSold = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes('death_date'));
-  return animalsDied.map(mapAnimalData);
+  return animalsSold.map(mapAnimalData);
 };
 
 // Fetch animals that have been purchased. (Currently, this is determined by the presence of a 'total_movements' in the animal's data field.)
 export const fetchPurchasedAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name');
-  const animalsDied = results
+  const animalsPurchased = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes(',"total_movements":0,'));
     console.log(results);
-    return animalsDied.map(mapAnimalData);
+    return animalsPurchased.map(mapAnimalData);
 };
 
 // Fetch animals that have been born. (Currently, this is determined by the absence of a 'total_movements' in the animal's data field.)
 export const fetchHomeBredAnimals = async () => {
-  const results = await fetchPaginatedData('/api/asset/animal?sort=name');
-  const animalsDied = results
+  const results = await fetchPaginatedData('/api/log/activity?sort=name');
+  const animalsHome = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && animal.attributes.data.includes(',"total_movements":0,'));
     console.log(results);
-    return animalsDied.map(mapAnimalData);
+    return animalsHome.map(mapAnimalData);
+};
+
+
+// Fetch activity logs for a specific animal.
+export const fetchActivityLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[asset.id]='+id);
+    return results.map(mapAnimalData);
 };

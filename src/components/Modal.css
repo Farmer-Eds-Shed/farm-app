@@ -1,8 +1,29 @@
 .custom-modal {
-    --height: 95vh; /* 95% of the viewport height */
+    --height: 99vh; /* 95% of the viewport height */
+    --width: 99vw;  /*95% of the viewport width */
 }
 
 .custom-modal-content {
     height: 100%; /* Ensure content takes full height of the modal */
     overflow-y: auto; /* Enable vertical scrolling for the content */
+}
+
+.custom-modal-content .modal-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.custom-modal-content .modal-column {
+    padding: 10px;
+    flex: 0 0 100%;
+}
+
+@media (min-width: 768px) {
+    .custom-modal-content .modal-column:first-child {
+        flex: 0 0 25%;
+    }
+
+    .custom-modal-content .modal-column:last-child {
+        flex: 0 0 75%;
+    }
 }
