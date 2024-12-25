@@ -17,3 +17,11 @@ export const equipmentColDefs = [
   { field: "notes", sortable: true, filter: true  },
 
 ];
+
+export const activityLogColDefs = [
+
+  { field: "name", sortable: true, filter: true  },
+  { field: "date", sortable: true, filter: true  },
+  { field: "notes", sortable: true, filter: true  },
+
+];

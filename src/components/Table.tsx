@@ -18,7 +18,7 @@ const myTheme = themeQuartz
     headerFontSize: 20,
     headerFontWeight: 600,
     headerTextColor: "#919191",
-    fontSize: 18, 
+    fontSize: 18,
     oddRowBackgroundColor: "#DCDCDC",
     rowBorder: false,
     sidePanelBorder: false,
@@ -39,13 +39,21 @@ interface TableProps {
   isExternalFilterPresent: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionChanged, onCellClicked, selectedRows = [], isExternalFilterPresent }) => {
+const Table: React.FC<TableProps> = ({
+  rowData,
+  colDefs,
+  loading,
+  onSelectionChanged,
+  onCellClicked,
+  selectedRows = [],
+  isExternalFilterPresent,
+}) => {
   const gridRef = useRef<any>(null);
 
   useEffect(() => {
-    if (gridRef.current && selectedRows) {
+    if (gridRef.current && gridRef.current.api && selectedRows) {
       gridRef.current.api.forEachNode((node: any) => {
-        if (selectedRows.some(row => row.id === node.data.id)) {
+        if (selectedRows.some((row) => row.id === node.data.id)) {
           node.setSelected(true);
         }
       });
@@ -57,7 +65,7 @@ const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionCha
   };
 
   const doesExternalFilterPassFunc = (node: any) => {
-    return selectedRows.some(row => row.id === node.data.id);
+    return selectedRows.some((row) => row.id === node.data.id);
   };
 
   return (
@@ -74,11 +82,11 @@ const Table: React.FC<TableProps> = ({ rowData, colDefs, loading, onSelectionCha
           theme={myTheme}
           rowData={rowData}
           columnDefs={colDefs}
-          rowSelection={{mode: 'multiRow'}}
+          rowSelection={{ mode: 'multiRow' }}
           pagination={true}
           paginationPageSize={50}
           onSelectionChanged={onSelectionChanged}
-          onCellClicked={params => onCellClicked(params.data)}
+          onCellClicked={(params) => onCellClicked(params.data)}
           isExternalFilterPresent={isExternalFilterPresentFunc}
           doesExternalFilterPass={doesExternalFilterPassFunc}
         />

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     IonModal, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonCard,
     IonCardHeader, IonCardContent, IonList, IonItem, IonLabel
 } from '@ionic/react';
 import './Modal.css';
+import Table from './Table';
+import { fetchActivityLogs } from '../services/dataService';
+import { activityLogColDefs } from '../constants/ColumnDefinitions';
 
 interface CustomModalProps {
     isOpen: boolean;
@@ -13,15 +16,27 @@ interface CustomModalProps {
 }
 
 const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title }) => {
+    const [activityLogs, setActivityLogs] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (isOpen && cellData && cellData.id) {
+            setLoading(true);
+            fetchActivityLogs(cellData.id).then(logs => {
+                setActivityLogs(logs);
+                setLoading(false);
+            }).catch(() => {
+                setLoading(false);
+            });
+        }
+    }, [isOpen, cellData]);
+
     const formatLabel = (label: string) => {
-        // Replace underscores with spaces and capitalize the first letter of each word
         return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     };
 
     const renderDetails = (data: any) => {
         if (!data) return null;
-
-        // Filter out 'data' and 'id' fields
         const filteredKeys = Object.keys(data).filter(key => key !== 'data' && key !== 'id');
 
         return (
@@ -46,8 +61,6 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
 
     const renderAdditionalData = (data: any) => {
         if (!data) return null;
-
-        // Filter out '_links' field
         const filteredKeys = Object.keys(data).filter(key => key !== '_links');
 
         return (
@@ -71,29 +84,6 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
         );
     };
 
-    const renderTable = () => {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Column 1</th>
-                        <th>Column 2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                    </tr>
-                    <tr>
-                        <td>Data 3</td>
-                        <td>Data 4</td>
-                    </tr>
-                </tbody>
-            </table>
-        );
-    };
-
     return (
         <IonModal isOpen={isOpen} onDidDismiss={onClose} className="custom-modal">
             <IonHeader>
@@ -114,7 +104,13 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
                                 {renderAdditionalData(cellData?.data)}
                             </div>
                             <div className="modal-column">
-                                {renderTable()}
+                                <Table 
+                                    rowData={activityLogs} 
+                                    colDefs={activityLogColDefs}
+                                    loading={loading} 
+                                    onCellClicked={(cellData) => { /* Handle cell click */ }} 
+                                    isExternalFilterPresent={false} 
+                                />
                             </div>
                         </div>
                     </IonCardContent>

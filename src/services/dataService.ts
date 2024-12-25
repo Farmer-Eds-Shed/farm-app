@@ -180,7 +180,7 @@ export const fetchPurchasedAnimals = async () => {
 
 // Fetch animals that have been born. (Currently, this is determined by the absence of a 'total_movements' in the animal's data field.)
 export const fetchHomeBredAnimals = async () => {
-  const results = await fetchPaginatedData('/api/log/activity?sort=name');
+  const results = await fetchPaginatedData('/api/asset/animal?sort=name');
   const animalsHome = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && animal.attributes.data.includes(',"total_movements":0,'));
     console.log(results);
@@ -190,6 +190,6 @@ export const fetchHomeBredAnimals = async () => {
 
 // Fetch activity logs for a specific animal.
 export const fetchActivityLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/asset/animal?sort=name&filter[asset.id]='+id);
-    return results.map(mapAnimalData);
+  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
+    return results.map(mapActivityLogData);
 };
