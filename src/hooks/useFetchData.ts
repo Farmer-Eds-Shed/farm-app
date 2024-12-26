@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 
-const useFetchData = (fetchDataFunction: () => Promise<any[]>) => {
+const useFetchData = (fetchDataFunctions: (() => Promise<any>) | (() => Promise<any>)[]) => {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                const data = await fetchDataFunction();
-                setData(data);
+                const results = await Promise.all(
+                    (Array.isArray(fetchDataFunctions) ? fetchDataFunctions : [fetchDataFunctions]).map(fn => fn())
+                );
+                setData(results.flat());
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -16,7 +19,7 @@ const useFetchData = (fetchDataFunction: () => Promise<any[]>) => {
             }
         };
         fetchData();
-    }, [fetchDataFunction]);
+    }, [fetchDataFunctions]);
 
     return { data, loading };
 };

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
     IonModal, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonCard,
     IonCardHeader, IonCardContent, IonList, IonItem, IonLabel
 } from '@ionic/react';
 import './Modal.css';
 import Table from './Table';
-import { fetchActivityLogs } from '../services/dataService';
+import useFetchData from '../hooks/useFetchData';
+import { fetchActivityLogs, fetchBirthLogs, fetchObservationLogs, fetchMedicalLogs, fetchHarvestLogs } from '../services/dataService';
 import { activityLogColDefs } from '../constants/ColumnDefinitions';
 
 interface CustomModalProps {
@@ -16,20 +17,21 @@ interface CustomModalProps {
 }
 
 const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title }) => {
-    const [activityLogs, setActivityLogs] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const fetchDataFunctions = useMemo(() => {
+        if (cellData && cellData.id) {
+            return [
+                () => fetchActivityLogs(cellData.id),
+                () => fetchBirthLogs(cellData.id),
+                () => fetchObservationLogs(cellData.id),
+                () => fetchMedicalLogs(cellData.id),
+                () => fetchHarvestLogs(cellData.id),
 
-    useEffect(() => {
-        if (isOpen && cellData && cellData.id) {
-            setLoading(true);
-            fetchActivityLogs(cellData.id).then(logs => {
-                setActivityLogs(logs);
-                setLoading(false);
-            }).catch(() => {
-                setLoading(false);
-            });
+            ];
         }
-    }, [isOpen, cellData]);
+        return [];
+    }, [cellData]);
+
+    const { data: logs, loading } = useFetchData(fetchDataFunctions);
 
     const formatLabel = (label: string) => {
         return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -105,7 +107,7 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title })
                             </div>
                             <div className="modal-column">
                                 <Table 
-                                    rowData={activityLogs} 
+                                    rowData={logs} 
                                     colDefs={activityLogColDefs}
                                     loading={loading} 
                                     onCellClicked={(cellData) => { /* Handle cell click */ }} 

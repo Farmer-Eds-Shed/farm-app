@@ -8,7 +8,7 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { eye, eyeOff, download, add } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
 import { fetchActiveAnimals, fetchPurchasedAnimals, fetchSoldAnimals, fetchDeadAnimals } from '../services/dataService';
@@ -47,12 +47,14 @@ const LivestockPage: React.FC = () => {
     setCellData(null);
   };
 
-  const dataFetchers = {
-    active: fetchActiveAnimals,
-    purchased: fetchPurchasedAnimals,
-    sold: fetchSoldAnimals,
-    mortality: fetchDeadAnimals,
-  };
+  const dataFetchers = useMemo(() => {
+    return {
+      active: fetchActiveAnimals,
+      purchased: fetchPurchasedAnimals,
+      sold: fetchSoldAnimals,
+      mortality: fetchDeadAnimals,
+    };
+  }, []);
 
   const { data, loading } = useFetchData(dataFetchers[selectedTable]);
 

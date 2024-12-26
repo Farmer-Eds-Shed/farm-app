@@ -208,3 +208,8 @@ export const fetchMedicalLogs = async (id:any) => {
   const results = await fetchPaginatedData('/api/log/medical?sort=name&filter[asset.id]='+id);
     return results.map(mapLogData);
 };
+
+export const fetchHarvestLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/harvest?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
+};
