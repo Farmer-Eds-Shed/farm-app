@@ -9,13 +9,23 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { useState, useMemo } from 'react';
-import { eye, eyeOff, download, add } from 'ionicons/icons';
+import { eye, eyeOff } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
-import { fetchActiveAnimals, fetchPurchasedAnimals, fetchSoldAnimals, fetchDeadAnimals } from '../services/dataService';
+import { 
+  fetchActiveAnimals, 
+  fetchPurchasedAnimals, 
+  fetchSoldAnimals, 
+  fetchDeadAnimals, 
+  fetchActivityLogs, 
+  fetchBirthLogs, 
+  fetchObservationLogs, 
+  fetchMedicalLogs, 
+  fetchHarvestLogs 
+} from '../services/dataService';
 import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { livestockColDefs } from '../constants/ColumnDefinitions';
-import Modal from '../components/Modal';
+import Modal from '../components/LogViewModal';
 import './Page.css';
 
 const LivestockPage: React.FC = () => {
@@ -57,6 +67,14 @@ const LivestockPage: React.FC = () => {
   }, []);
 
   const { data, loading } = useFetchData(dataFetchers[selectedTable]);
+
+  const fetchFunctions = [
+    fetchActivityLogs,
+    fetchBirthLogs,
+    fetchObservationLogs,
+    fetchMedicalLogs,
+    fetchHarvestLogs
+  ];
 
   return (
     <IonPage>
@@ -104,7 +122,13 @@ const LivestockPage: React.FC = () => {
             selectedRows={selectedRows}
             isExternalFilterPresent={isShowingSelectedRows}
           />
-          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} title={`Animal: ${cellData?.tag ?? 'Unknown'}`}/>
+          <Modal 
+            isOpen={isModalOpen} 
+            onClose={closeModal} 
+            cellData={cellData} 
+            title={`Animal: ${cellData?.tag ?? 'Unknown'}`}
+            fetchFunctions={fetchFunctions} 
+          />
         </div>
       </IonContent>
     </IonPage>

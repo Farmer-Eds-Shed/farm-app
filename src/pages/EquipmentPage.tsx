@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonToolbar,
+  IonButton,
+  IonIcon,
+} from '@ionic/react';
+import { useState } from 'react';
+import { eye, eyeOff } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
-import { fetchEquipment } from '../services/dataService';
+import { fetchEquipment, fetchEquipmentLogs, fetchMaintenanceLogs } from '../services/dataService';
 import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { equipmentColDefs } from '../constants/ColumnDefinitions';
-import Modal from '../components/Modal';
-import { eye, eyeOff } from 'ionicons/icons';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonToolbar, IonButton, IonIcon } from '@ionic/react';
+import Modal from '../components/LogViewModal';
 import './Page.css';
 
 const EquipmentPage: React.FC = () => {
-  const { data, loading } = useFetchData(fetchEquipment);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -38,11 +46,13 @@ const EquipmentPage: React.FC = () => {
     setCellData(null);
   };
 
-  useEffect(() => {
-    if (selectedRows.length > 0) {
-      console.log('Selected Rows:', selectedRows);
-    }
-  }, [selectedRows]);
+  const { data, loading } = useFetchData(fetchEquipment);
+
+  // Define the log fetching functions
+  const fetchFunctions = [
+    (id: string) => fetchEquipmentLogs(id),
+    (id: string) => fetchMaintenanceLogs(id),
+  ];
 
   return (
     <IonPage>
@@ -59,7 +69,7 @@ const EquipmentPage: React.FC = () => {
               <IonButton className='toolbar-buttons' onClick={handleBatchLog}>
                 New Event
               </IonButton>
-              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, "equipment")}>
+              <IonButton className='toolbar-buttons' onClick={() => handleExportCSV(selectedRows, 'equipment')}>
                 CSV Export
               </IonButton>
             </IonButtons>
@@ -75,10 +85,16 @@ const EquipmentPage: React.FC = () => {
             loading={loading}
             onSelectionChanged={onSelectionChanged}
             onCellClicked={handleCellClick}
-            selectedRows={selectedRows}  // Pass selected rows to the table
+            selectedRows={selectedRows}
             isExternalFilterPresent={isShowingSelectedRows}
           />
-          <Modal isOpen={isModalOpen} onClose={closeModal} cellData={cellData} title={`Equipment: ${cellData?.name ?? 'Unknown'}`}/>
+          <Modal 
+            isOpen={isModalOpen} 
+            onClose={closeModal} 
+            cellData={cellData} 
+            title={`Equipment: ${cellData?.tag ?? 'Unknown'}`}
+            fetchFunctions={fetchFunctions} 
+          />
         </div>
       </IonContent>
     </IonPage>

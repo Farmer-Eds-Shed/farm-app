@@ -213,3 +213,14 @@ export const fetchHarvestLogs = async (id:any) => {
   const results = await fetchPaginatedData('/api/log/harvest?sort=name&filter[asset.id]='+id);
     return results.map(mapLogData);
 };
+
+// Fetch maintenance logs for a specific equipment.
+export const fetchMaintenanceLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/maintenance?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
+};
+
+export const fetchEquipmentLogs = async (id:any) => {
+  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
+    return results.map(mapLogData);
+};

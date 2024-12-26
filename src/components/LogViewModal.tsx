@@ -3,10 +3,9 @@ import {
     IonModal, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonCard,
     IonCardHeader, IonCardContent, IonList, IonItem, IonLabel
 } from '@ionic/react';
-import './Modal.css';
+import './LogViewModal.css';
 import Table from './Table';
 import useFetchData from '../hooks/useFetchData';
-import { fetchActivityLogs, fetchBirthLogs, fetchObservationLogs, fetchMedicalLogs, fetchHarvestLogs } from '../services/dataService';
 import { activityLogColDefs } from '../constants/ColumnDefinitions';
 
 interface CustomModalProps {
@@ -14,22 +13,16 @@ interface CustomModalProps {
     onClose: () => void;
     cellData: any;
     title: string;
+    fetchFunctions: Array<(id: string) => Promise<any>>;
 }
 
-const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title }) => {
+const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, fetchFunctions }) => {
     const fetchDataFunctions = useMemo(() => {
         if (cellData && cellData.id) {
-            return [
-                () => fetchActivityLogs(cellData.id),
-                () => fetchBirthLogs(cellData.id),
-                () => fetchObservationLogs(cellData.id),
-                () => fetchMedicalLogs(cellData.id),
-                () => fetchHarvestLogs(cellData.id),
-
-            ];
+            return fetchFunctions.map(fn => () => fn(cellData.id));
         }
         return [];
-    }, [cellData]);
+    }, [cellData, fetchFunctions]);
 
     const { data: logs, loading } = useFetchData(fetchDataFunctions);
 
