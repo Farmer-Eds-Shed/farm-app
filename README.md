@@ -34,6 +34,20 @@ To get started with Farm-App, follow these steps:
 
 .
 
+## Demo
+
+A demo version is hosted on GitHub Pages:
+
+[Farm-App Demo](https://farmer-eds-shed.github.io/farm-app/)
+
+**Important!** CRUD operations will be in real time so use with caution with your own data. <br>
+Not Recommended for Production farmOS Sites.
+
+- This is very much still a work in progress so most features do not work correctly yet.
+- No credentials or any other data are stored on the site. 
+- farmOS Tokens are stored in your browser cache.
+- This is a single page site which uses client side routing - GitHub pages will 404 if you refresh the page. 
+
 ## Contributing
 
 We welcome contributions to Farm-App. To contribute:
