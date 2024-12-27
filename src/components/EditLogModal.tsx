@@ -44,7 +44,8 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose} className="custom-modal">
+    <IonModal isOpen={isOpen} onDidDismiss={onClose} >
+        <div className="edit-modal">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Edit Log</IonTitle>
@@ -87,6 +88,7 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
           <p>No log data available to edit.</p>
         )}
       </IonContent>
+      </div>
     </IonModal>
   );
 };

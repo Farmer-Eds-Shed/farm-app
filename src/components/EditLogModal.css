@@ -1,5 +1,7 @@
-.custom-modal {
-    border: 5px solid #ccc;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.5);
+.edit-modal {
+    border: 5px solid lightgrey;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.5), 0 20px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    min-height: 90vh;
+    padding: 20px; /* Optional: Add padding to give some space inside the modal */
   }
