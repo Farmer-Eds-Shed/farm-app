@@ -1,3 +1,4 @@
+import React, { useState, useMemo } from 'react';
 import {
   IonButtons,
   IonContent,
@@ -8,24 +9,24 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/react';
-import { useState, useMemo } from 'react';
 import { eye, eyeOff } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
-import { 
-  fetchActiveAnimals, 
-  fetchPurchasedAnimals, 
-  fetchSoldAnimals, 
-  fetchDeadAnimals, 
-  fetchActivityLogs, 
-  fetchBirthLogs, 
-  fetchObservationLogs, 
-  fetchMedicalLogs, 
-  fetchHarvestLogs 
+import {
+  fetchActiveAnimals,
+  fetchPurchasedAnimals,
+  fetchSoldAnimals,
+  fetchDeadAnimals,
+  fetchActivityLogs,
+  fetchBirthLogs,
+  fetchObservationLogs,
+  fetchMedicalLogs,
+  fetchHarvestLogs
 } from '../services/dataService';
 import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { livestockColDefs } from '../constants/ColumnDefinitions';
-import Modal from '../components/LogViewModal';
+import LogViewModal from '../components/LogViewModal';
+import EditLogModal from '../components/EditLogModal';
 import './Page.css';
 
 const LivestockPage: React.FC = () => {
@@ -33,7 +34,9 @@ const LivestockPage: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [cellData, setCellData] = useState<any>(null);
+  const [logData, setLogData] = useState<any>(null);
 
   const handleBatchLog = () => {
     console.log('Selected Cells:', selectedRows);
@@ -55,6 +58,21 @@ const LivestockPage: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setCellData(null);
+  };
+
+  const handleEditLog = (logData: any) => {
+    setIsModalOpen(false); // Close the view modal
+    setLogData(logData); // Set the log data for editing
+    setIsEditModalOpen(true); // Open the edit modal
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const saveEditedLog = (editedLog: any) => {
+    // Implement the logic to save the edited log
+    console.log('Edited Log:', editedLog);
   };
 
   const dataFetchers = useMemo(() => {
@@ -122,12 +140,19 @@ const LivestockPage: React.FC = () => {
             selectedRows={selectedRows}
             isExternalFilterPresent={isShowingSelectedRows}
           />
-          <Modal 
+          <LogViewModal 
             isOpen={isModalOpen} 
             onClose={closeModal} 
             cellData={cellData} 
             title={`Animal: ${cellData?.tag ?? 'Unknown'}`}
             fetchFunctions={fetchFunctions} 
+            onEditLog={handleEditLog} // Pass the handler
+          />
+          <EditLogModal
+            isOpen={isEditModalOpen}
+            onClose={closeEditModal}
+            logData={logData} // Pass the correct log data
+            onSave={saveEditedLog}
           />
         </div>
       </IonContent>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     IonModal, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonCard,
     IonCardHeader, IonCardContent, IonList, IonItem, IonLabel
@@ -14,9 +14,10 @@ interface CustomModalProps {
     cellData: any;
     title: string;
     fetchFunctions: Array<(id: string) => Promise<any>>;
+    onEditLog: (data: any) => void;
 }
 
-const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, fetchFunctions }) => {
+const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, fetchFunctions, onEditLog }) => {
     const fetchDataFunctions = useMemo(() => {
         if (cellData && cellData.id) {
             return fetchFunctions.map(fn => () => fn(cellData.id));
@@ -25,6 +26,10 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, f
     }, [cellData, fetchFunctions]);
 
     const { data: logs, loading } = useFetchData(fetchDataFunctions);
+
+    const handleLogEdit = (logData: any) => {
+        onEditLog(logData);
+    };
 
     const formatLabel = (label: string) => {
         return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -103,7 +108,7 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, f
                                     rowData={logs} 
                                     colDefs={activityLogColDefs}
                                     loading={loading} 
-                                    onCellClicked={(cellData) => { /* Handle cell click */ }} 
+                                    onCellClicked={handleLogEdit} 
                                     isExternalFilterPresent={false} 
                                 />
                             </div>
@@ -115,4 +120,4 @@ const Modal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, title, f
     );
 };
 
-export default Modal;
+export default LogViewModal;
