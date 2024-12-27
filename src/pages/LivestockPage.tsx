@@ -33,7 +33,7 @@ const LivestockPage: React.FC = () => {
   const [selectedTable, setSelectedTable] = useState<'purchased' | 'active' | 'sold' | 'mortality'>('active');
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [cellData, setCellData] = useState<any>(null);
   const [logData, setLogData] = useState<any>(null);
@@ -52,17 +52,16 @@ const LivestockPage: React.FC = () => {
 
   const handleCellClick = (data: any) => {
     setCellData(data);
-    setIsModalOpen(true);
+    setIsViewModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
     setCellData(null);
   };
 
   const handleEditLog = (logData: any) => {
-    setIsModalOpen(false); // Close the view modal
-    setLogData(logData); // Set the log data for editing
+    setLogData(logData);
     setIsEditModalOpen(true); // Open the edit modal
   };
 
@@ -73,6 +72,7 @@ const LivestockPage: React.FC = () => {
   const saveEditedLog = (editedLog: any) => {
     // Implement the logic to save the edited log
     console.log('Edited Log:', editedLog);
+    closeEditModal(); // Close the edit modal after saving
   };
 
   const dataFetchers = useMemo(() => {
@@ -141,8 +141,8 @@ const LivestockPage: React.FC = () => {
             isExternalFilterPresent={isShowingSelectedRows}
           />
           <LogViewModal 
-            isOpen={isModalOpen} 
-            onClose={closeModal} 
+            isOpen={isViewModalOpen} 
+            onClose={closeViewModal} 
             cellData={cellData} 
             title={`Animal: ${cellData?.tag ?? 'Unknown'}`}
             fetchFunctions={fetchFunctions} 

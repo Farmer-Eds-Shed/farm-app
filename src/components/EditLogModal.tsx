@@ -10,7 +10,7 @@ import {
   IonItem,
   IonLabel
 } from '@ionic/react';
-import './EditLogModal.css'; // Ensure this file includes the CSS class
+import './EditLogModal.css';
 
 interface EditLogModalProps {
   isOpen: boolean;
@@ -25,17 +25,22 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
   useEffect(() => {
     if (logData) {
       setEditedLog(logData);
-      console.log('Log data:', logData);
     }
   }, [logData]);
 
   const handleSave = () => {
     onSave(editedLog);
-    onClose();
+    onClose(); // Close the edit modal after saving
   };
 
   const handleChange = (field: string, value: any) => {
     setEditedLog((prevLog: any) => ({ ...prevLog, [field]: value }));
+  };
+
+  const formatDateForInput = (date: string) => {
+    if (!date) return ''; // Handle null or undefined date
+    const [month, day, year] = date.split('/');
+    return `${year}-${month}-${day}`; // Format to YYYY-MM-DD
   };
 
   return (
@@ -69,7 +74,7 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
               <IonLabel position="stacked">Date</IonLabel>
               <IonInput
                 type="date"
-                value={editedLog.date}
+                value={formatDateForInput(editedLog.date)}
                 onIonChange={(e) => handleChange('date', e.detail.value)}
               />
             </IonItem>
