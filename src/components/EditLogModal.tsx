@@ -44,7 +44,7 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
     if (!date) return ''; // Handle null or undefined date
     const dateParts = date.split('/');
     if (dateParts.length !== 3) return ''; // Handle incorrect date format
-    const [month, day, year] = dateParts;
+    const [day, month, year] = dateParts;
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`; // Format to YYYY-MM-DD
   };
 
