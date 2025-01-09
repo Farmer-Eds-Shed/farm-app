@@ -235,3 +235,14 @@ export const postActivityLog = async (logData: any) => {
     throw error;
   }
 };
+
+//Patch an existing activity log.
+export const patchActivityLog = async (logData: any) => {
+  try {
+    const axiosInstance = await axiosInstancePromise;
+    await axiosInstance.patch('/api/log/activity/'+logData.id, logData);
+  } catch (error) {
+    console.error('Error patching activity log:', error);
+    throw error;
+  }
+};
