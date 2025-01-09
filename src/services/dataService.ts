@@ -224,3 +224,14 @@ export const fetchEquipmentLogs = async (id:any) => {
   const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
     return results.map(mapLogData);
 };
+
+// Post a new activity log.
+export const postActivityLog = async (logData: any) => {
+  try {
+    const axiosInstance = await axiosInstancePromise;
+    await axiosInstance.post('/api/log/activity', logData);
+  } catch (error) {
+    console.error('Error posting activity log:', error);
+    throw error;
+  }
+};
