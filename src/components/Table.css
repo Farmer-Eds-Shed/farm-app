@@ -8,4 +8,20 @@
     .ag-paging-description {
         display: none
     }
+
+}
+
+.ag-theme-balham .ag-cell
+{
+    height: 300px;
+}
+
+.ag-theme-balham .ag-header-cell
+{
+    height: 300px;
+}
+
+.ag-theme-balham .ag-header-row
+{
+    height: 300px;
 }

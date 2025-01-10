@@ -39,6 +39,8 @@ interface TableProps {
   isExternalFilterPresent: boolean;
 }
 
+
+
 const Table: React.FC<TableProps> = ({
   rowData,
   colDefs,
@@ -69,7 +71,7 @@ const Table: React.FC<TableProps> = ({
   };
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div style={{ height: '92vh', width: '100%' }}>
       {loading ? (
         <div className="spinner-container">
           <div className="spinner-wrapper">
