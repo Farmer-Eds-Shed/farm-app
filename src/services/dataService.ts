@@ -34,6 +34,7 @@ interface EquipmentData {
 
 interface ActivityLogData {
   id: string;
+  type: string;
   attributes: ActivityAttributes;
 }
 
@@ -118,7 +119,8 @@ const mapLogData = (item: ActivityLogData) => ({
   name: item.attributes.name,
   date: justDate(item.attributes.timestamp),
   notes: item.attributes.notes ? item.attributes.notes.value : null,
-  status: mapStatus(item.attributes.status),
+  status: item.attributes.status,
+  type: item.type,
 });
 
 // Fetch all equipment.
@@ -240,7 +242,7 @@ export const postActivityLog = async (logData: any) => {
 export const patchActivityLog = async (logData: any) => {
   try {
     const axiosInstance = await axiosInstancePromise;
-    await axiosInstance.patch('/api/log/activity/'+logData.id, logData);
+    await axiosInstance.patch('/api/log/activity/'+logData.data.id, logData);
   } catch (error) {
     console.error('Error patching activity log:', error);
     throw error;

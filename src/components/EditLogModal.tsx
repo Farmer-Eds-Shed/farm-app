@@ -11,6 +11,7 @@ import {
   IonLabel
 } from '@ionic/react';
 import './EditLogModal.css';
+import { patchActivityLog } from '../services/dataService'; // Import the patchActivityLog function
 
 interface EditLogModalProps {
   isOpen: boolean;
@@ -31,8 +32,27 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
     }
   }, [logData]);
 
-  const handleSave = () => {
-    onSave(editedLog); // Save the edited log data
+  const handleSave = async () => {
+    try {
+      // Prepare the editedLog as per the schema and include the log ID
+      const logDataToPatch = {
+        data:{
+          id: editedLog.id,
+          type: editedLog.type,
+          attributes: {
+            name: editedLog.name,
+            notes: { value: editedLog.notes },
+            timestamp: new Date(editedLog.date).toISOString().replace('.000Z', '+00:00'), // Format date
+            status: editedLog.status
+          }
+        }
+      };
+
+      await patchActivityLog(logDataToPatch); // Save the edited log data using patchActivityLog
+      onSave(editedLog); // Call onSave callback
+    } catch (error) {
+      console.error('Error saving edited log:', error);
+    }
     onClose(); // Close the edit modal after saving
   };
 
