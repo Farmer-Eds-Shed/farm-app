@@ -77,3 +77,12 @@ export const filterParams: IDateFilterParams = {
     const ieDateString = `${day}/${month}/${year}`;
     return(ieDateString);
     };
+
+// date to utc timestamp for date input fields
+  export  const formatDateForInput = (date: string) => {
+    if (!date) return ''; // Handle null or undefined date
+    const dateParts = date.split('/');
+    if (dateParts.length !== 3) return ''; // Handle incorrect date format
+    const [day, month, year] = dateParts;
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`; // Format to YYYY-MM-DD
+  };

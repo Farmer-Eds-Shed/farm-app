@@ -11,7 +11,8 @@ import {
   IonLabel
 } from '@ionic/react';
 import './EditLogModal.css';
-import { patchActivityLog } from '../services/dataService'; // Import the patchActivityLog function
+import { patchLog } from '../services/dataService'; // Import the patchActivityLog function
+import { formatDateForInput } from '../services/dateService'; // Import the formatDateForInput function
 
 interface EditLogModalProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
         }
       };
 
-      await patchActivityLog(logDataToPatch); // Save the edited log data using patchActivityLog
+      await patchLog(logDataToPatch); // Save the edited log data using patchActivityLog
       onSave(editedLog); // Call onSave callback
     } catch (error) {
       console.error('Error saving edited log:', error);
@@ -60,13 +61,6 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
     setEditedLog((prevLog: any) => ({ ...prevLog, [field]: value }));
   };
 
-  const formatDateForInput = (date: string) => {
-    if (!date) return ''; // Handle null or undefined date
-    const dateParts = date.split('/');
-    if (dateParts.length !== 3) return ''; // Handle incorrect date format
-    const [day, month, year] = dateParts;
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`; // Format to YYYY-MM-DD
-  };
 
   console.log("Edited Log:", editedLog);
   console.log("Formatted Date:", editedLog.date);
