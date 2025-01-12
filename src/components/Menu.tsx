@@ -18,7 +18,7 @@ import Icon from '@mdi/react';
 import { appPages } from '../constants/MenuList'; // Import the appPages array
 
 
-interface AppPage {
+interface appPages {
   url: string;
 
   mdiIcon: string;

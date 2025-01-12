@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
         <IonGrid>
         <IonRow>
             {appPages
-              .filter(appPage => appPage.url !== '/home' || location.pathname !== '/home') // Hide "Home" link on HomePage
+              .filter(appPage => appPage.url !== '/home' || location.hash !== '#/home') // Hide "Home" link on HomePage
               .map((appPage, index) => (
                 <IonCol size="4" key={index} className="icon-grid-item">
                   <IonRouterLink routerLink={appPage.url}>

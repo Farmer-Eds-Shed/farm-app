@@ -46,6 +46,11 @@ const EquipmentPage: React.FC = () => {
     setCellData(null);
   };
 
+  const handleEditLog = (data: any) => {
+    // Implement your edit log logic here
+    console.log("Editing log:", data);
+  };
+
   const { data, loading } = useFetchData(fetchEquipment);
 
   // Define the log fetching functions
@@ -93,7 +98,8 @@ const EquipmentPage: React.FC = () => {
             onClose={closeModal} 
             cellData={cellData} 
             title={`Equipment: ${cellData?.tag ?? 'Unknown'}`}
-            fetchFunctions={fetchFunctions} 
+            fetchFunctions={fetchFunctions}
+            onEditLog={handleEditLog} // Add the missing property here
           />
         </div>
       </IonContent>
