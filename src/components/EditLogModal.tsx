@@ -62,9 +62,6 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
   };
 
 
-  console.log("Edited Log:", editedLog);
-  console.log("Formatted Date:", editedLog.date);
-
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose} >
       <div className="edit-modal">

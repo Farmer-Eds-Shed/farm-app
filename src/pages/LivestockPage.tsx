@@ -27,6 +27,7 @@ import Table from '../components/Table';
 import { livestockColDefs } from '../constants/ColumnDefinitions';
 import LogViewModal from '../components/LogViewModal';
 import EditLogModal from '../components/EditLogModal';
+import NewEventModal from '../components/NewEventModal';
 import './Page.css';
 
 const LivestockPage: React.FC = () => {
@@ -35,10 +36,12 @@ const LivestockPage: React.FC = () => {
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isNewEventModalOpen, setIsNewEventModalOpen] = useState<boolean>(false);
   const [cellData, setCellData] = useState<any>(null);
   const [logData, setLogData] = useState<any>(null);
 
   const handleBatchLog = () => {
+    setIsNewEventModalOpen(true);
     console.log('Selected Cells:', selectedRows);
   };
 
@@ -153,6 +156,10 @@ const LivestockPage: React.FC = () => {
             onClose={closeEditModal}
             logData={logData} // Pass the correct log data
             onSave={saveEditedLog}
+          />
+          <NewEventModal 
+            isOpen={isNewEventModalOpen} 
+            onClose={() => setIsNewEventModalOpen(false)}
           />
         </div>
       </IonContent>
