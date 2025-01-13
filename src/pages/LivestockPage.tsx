@@ -160,6 +160,7 @@ const LivestockPage: React.FC = () => {
           <NewEventModal 
             isOpen={isNewEventModalOpen} 
             onClose={() => setIsNewEventModalOpen(false)}
+            selectedRows={selectedRows}
           />
         </div>
       </IonContent>

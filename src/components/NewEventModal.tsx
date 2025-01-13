@@ -11,21 +11,73 @@ import {
     IonInput,
     IonSelect,
     IonSelectOption,
-    IonTextarea
+    IonTextarea,
+    IonCard,
+    IonCardHeader
   } from '@ionic/react';
+import { postActivityLog } from '../services/dataService';
 
-const NewEventModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
+interface NewEventModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedRows: any[]; // Add selectedRows prop
+}
+
+const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selectedRows }) => {
   const [eventType, setEventType] = useState<string>('');
+  const [logName, setLogName] = useState<string>('');
+  const [notes, setNotes] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const animalAssets = selectedRows.map(row => ({
+    type: "asset--animal",
+    id: row.id, 
+}));
 
-  const handleSave = () => {
-    // Implement the logic to save the new activity log
-    console.log('New Activity Log Created');
-    onClose();
+  const handleSave = async () => {
+    const log = {
+      data: {
+        type: eventType,
+        attributes: {
+          name: logName,
+          timestamp: new Date(date).toISOString().replace('.000Z', '+00:00'),
+          status: "done", // Assuming status is done
+          notes: { value: notes }
+        },
+        relationships: {
+          asset: {
+                    data: [
+            
+                        animalAssets
+                        
+                    ],
+          }
+        }
+      }
+    };
+    console.log('New Log:', log);
+    try {
+      await postActivityLog(log);
+      console.log('New Activity Log Created');
+      onClose();
+    } catch (error) {
+      console.error('Failed to create log:', error);
+    }
   };
 
   const handleChange = (field: string, value: any) => {
-    // Implement the logic to update the new activity log
-    
+    switch (field) {
+      case 'name':
+        setLogName(value);
+        break;
+      case 'notes':
+        setNotes(value);
+        break;
+      case 'date':
+        setDate(value);
+        break;
+      default:
+        break;
+    }
     console.log('Field:', field, 'Value:', value);
   };
 
@@ -37,7 +89,7 @@ const NewEventModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isO
         </IonToolbar>
       </IonHeader>
       <IonContent>
-      <IonItem>
+        <IonItem>
           <IonLabel position="stacked">Event Type</IonLabel>
           <IonSelect value={eventType} placeholder="Activity" onIonChange={e => setEventType(e.detail.value)}>
             <IonSelectOption value="log--activity">Activity</IonSelectOption>
@@ -65,6 +117,18 @@ const NewEventModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isO
             onIonChange={(e) => handleChange('date', e.detail.value)}
           />
         </IonItem>
+        <IonCard>
+                    <IonCardHeader>
+                        <IonTitle>Animal Assets</IonTitle>
+                    </IonCardHeader>
+                    <div>
+                        {animalAssets.map(asset => (
+                            <div key={asset.id}>
+                                {asset.type}: {asset.id}
+                            </div>
+                        ))}
+                    </div>
+                </IonCard>
         <IonButton onClick={handleSave}>Save</IonButton>
         <IonButton onClick={onClose}>Cancel</IonButton>
       </IonContent>
