@@ -231,7 +231,8 @@ export const fetchEquipmentLogs = async (id:any) => {
 export const postActivityLog = async (logData: any) => {
   try {
     const axiosInstance = await axiosInstancePromise;
-    await axiosInstance.post('/api/log/activity', logData);
+    const logType = logData.data.type.replace(/--/g, '/');
+    await axiosInstance.post(`/api/${logType}`, logData);
   } catch (error) {
     console.error('Error posting activity log:', error);
     throw error;
@@ -242,7 +243,7 @@ export const postActivityLog = async (logData: any) => {
 export const patchLog = async (logData: any) => {
   try {
     const axiosInstance = await axiosInstancePromise;
-    const logType = logData.data.type.replace(/-/g, '/');
+    const logType = logData.data.type.replace(/--/g, '/');
     await axiosInstance.patch(`/api/${logType}/${logData.data.id}`, logData);
   } catch (error) {
     console.error('Error patching activity log:', error);

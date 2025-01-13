@@ -1,5 +1,5 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact,  } from '@ionic/react';
-import { HashRouter, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { IonReactHashRouter } from '@ionic/react-router'
 import Menu from './components/Menu';
 import HomePage from './pages/HomePage';

@@ -118,9 +118,9 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
                         <IonTitle>Animal Assets</IonTitle>
                     </IonCardHeader>
                     <div>
-                        {animalAssets.map(asset => (
-                            <div key={asset.id}>
-                                {asset.type}: {asset.id}
+                        {selectedRows.map(animal => (
+                            <div key={animal.id}>
+                                {animal.tag} - {animal.sex}
                             </div>
                         ))}
                     </div>

@@ -41,7 +41,12 @@ const LivestockPage: React.FC = () => {
   const [logData, setLogData] = useState<any>(null);
 
   const handleBatchLog = () => {
-    setIsNewEventModalOpen(true);
+    if (selectedRows.length > 0){ 
+      setIsNewEventModalOpen(true);
+    }
+    else {
+      alert("No rows selected");
+    }
     console.log('Selected Cells:', selectedRows);
   };
 
