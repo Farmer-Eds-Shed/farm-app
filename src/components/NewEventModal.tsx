@@ -45,11 +45,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         },
         relationships: {
           asset: {
-                    data: [
-            
-                        animalAssets
-                        
-                    ],
+                    data: animalAssets,
           }
         }
       }
