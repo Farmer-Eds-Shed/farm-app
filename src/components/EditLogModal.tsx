@@ -8,7 +8,8 @@ import {
   IonToolbar,
   IonInput,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonTextarea,
 } from '@ionic/react';
 import './EditLogModal.css';
 import { patchLog } from '../services/dataService'; // Import the patchActivityLog function
@@ -85,7 +86,8 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Notes</IonLabel>
-                <IonInput
+                <IonTextarea
+                  rows={6}
                   value={editedLog.notes}
                   onIonChange={(e) => handleChange('notes', e.detail.value)}
                 />

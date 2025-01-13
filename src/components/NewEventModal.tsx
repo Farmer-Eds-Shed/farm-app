@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     IonModal, 
     IonButton, 
@@ -8,10 +8,15 @@ import {
     IonTitle,
     IonLabel,
     IonItem,
-    IonInput
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonTextarea
   } from '@ionic/react';
 
 const NewEventModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
+  const [eventType, setEventType] = useState<string>('');
+
   const handleSave = () => {
     // Implement the logic to save the new activity log
     console.log('New Activity Log Created');
@@ -33,24 +38,33 @@ const NewEventModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isO
       </IonHeader>
       <IonContent>
       <IonItem>
-                <IonLabel position="stacked">Event</IonLabel>
-                <IonInput
-                  onIonChange={(e) => handleChange('name', e.detail.value)}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Notes</IonLabel>
-                <IonInput
-                  onIonChange={(e) => handleChange('notes', e.detail.value)}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Date</IonLabel>
-                <IonInput
-                  type="date"
-                  onIonChange={(e) => handleChange('date', e.detail.value)}
-                />
-              </IonItem>
+          <IonLabel position="stacked">Event Type</IonLabel>
+          <IonSelect value={eventType} placeholder="Activity" onIonChange={e => setEventType(e.detail.value)}>
+            <IonSelectOption value="log--activity">Activity</IonSelectOption>
+            <IonSelectOption value="log--observation">Observation</IonSelectOption>
+            <IonSelectOption value="log--medical">Medical</IonSelectOption>
+          </IonSelect>
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Log Name</IonLabel>
+          <IonInput
+            onIonChange={(e) => handleChange('name', e.detail.value)}
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Notes</IonLabel>
+          <IonTextarea
+            rows={6}
+            onIonChange={(e) => handleChange('notes', e.detail.value)}
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Date</IonLabel>
+          <IonInput
+            type="date"
+            onIonChange={(e) => handleChange('date', e.detail.value)}
+          />
+        </IonItem>
         <IonButton onClick={handleSave}>Save</IonButton>
         <IonButton onClick={onClose}>Cancel</IonButton>
       </IonContent>
