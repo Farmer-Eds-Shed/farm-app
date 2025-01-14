@@ -31,6 +31,11 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
         onEditLog(logData);
     };
 
+    const handleLogDelete = (logId: string) => {
+        // Your logic to delete the log, e.g., calling an API endpoint
+        console.log(`Log with id ${logId} deleted`);
+    };
+
     const formatLabel = (label: string) => {
         return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     };
@@ -111,6 +116,7 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
                                     onCellClicked={handleLogEdit} 
                                     isExternalFilterPresent={false} 
                                 />
+                                <IonButton onClick={() => handleLogDelete(cellData?.id)}>Delete Log</IonButton>
                             </div>
                         </div>
                     </IonCardContent>
