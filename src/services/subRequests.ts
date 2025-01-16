@@ -1,7 +1,6 @@
 import axios from 'axios';
 import storageService from '../services/storageService';
 
-
 interface RequestData {
     action: string;
     body: {
@@ -13,23 +12,21 @@ interface RequestData {
     waitFor?: string;
 }
 
-export const createSubRequests = async (req:any): Promise<any[]> => {
-    // Retrieve the request array from the message
-
+export const createSubRequests = async (req: any[]): Promise<any[]> => {
     const accessToken = await storageService.getItem('accessToken');
 
-    // Create the sub-requests using map
-    const suRequest = req.map((data:any, index:any) => {
-        // Determine the API type and create the URI
+    const suRequest = req.map((data: any, index: any) => {
         let apiType = data.body.data.type;
         let uri = apiType.replace(/--/g, "/");
 
-        // Append the ID to the URI if the action is 'update' or 'delete'
         if (data.action === "update" || data.action === "delete") {
             uri = uri + "/" + data.body.data.id;
+            if (data.action === "delete") {
+                data.body = {};
+            }
         }
 
-        // Create the sub-request object
+
         let sub: any = {
             "requestId": "req-" + (index + 1),
             "uri": "/api/" + uri,
@@ -42,7 +39,6 @@ export const createSubRequests = async (req:any): Promise<any[]> => {
             }
         };
 
-        // Add the waitFor property if it exists
         if (data.waitFor !== undefined) {
             sub.waitfor = data.waitFor;
         }
@@ -52,8 +48,6 @@ export const createSubRequests = async (req:any): Promise<any[]> => {
 
     return suRequest;
 };
-
-
 
 export const deleteSelectedRows = (selectedRows: any[]): any[] => {
     let req: any[] = [];
@@ -70,6 +64,20 @@ export const deleteSelectedRows = (selectedRows: any[]): any[] => {
         };
         req.push(logData);
     });
-
+    console.log('Delete Request:', req);
     return req;
+};
+
+export const deleteLogs = async (selectedRows: any[]) => {
+    try {
+        const subrequests = await createSubRequests(deleteSelectedRows(selectedRows));
+        console.log('Subrequests:', subrequests);
+
+        // Send the subrequests to the Drupal API
+        await axios.post('/subrequests?_format=json', { requests: subrequests });
+        console.log(`Logs deleted successfully for selected rows`);
+    } catch (error) {
+        console.error('Error deleting logs:', error);
+        throw error;
+    }
 };

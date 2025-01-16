@@ -26,6 +26,7 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
     }, [cellData, fetchFunctions]);
 
     const { data: logs, loading } = useFetchData(fetchDataFunctions);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     const handleLogEdit = (logData: any) => {
         onEditLog(logData);
@@ -35,6 +36,11 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
         // Your logic to delete the log, e.g., calling an API endpoint
         console.log(`Log with id ${logId} deleted`);
     };
+
+    const handleSelectionChanged = (event: any) => {
+        setSelectedRows(event.api.getSelectedRows());
+        console.log('Selected Rows:', event.api.getSelectedRows());
+      };
 
     const formatLabel = (label: string) => {
         return label.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
@@ -114,6 +120,7 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
                                     colDefs={activityLogColDefs}
                                     loading={loading} 
                                     onCellClicked={handleLogEdit} 
+                                    onSelectionChanged={handleSelectionChanged}
                                     isExternalFilterPresent={false} 
                                 />
                                 <IonButton onClick={() => handleLogDelete(cellData?.id)}>Delete Log</IonButton>

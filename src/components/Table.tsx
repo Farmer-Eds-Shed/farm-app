@@ -33,13 +33,11 @@ interface TableProps {
   rowData: any[];
   colDefs: any[];
   loading: boolean;
-  onSelectionChanged?: (event: any) => void;
+  onSelectionChanged: (event: any) => void;
   onCellClicked: (cellData: any) => void;
   selectedRows?: any[];
   isExternalFilterPresent: boolean;
 }
-
-
 
 const Table: React.FC<TableProps> = ({
   rowData,
