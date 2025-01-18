@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstancePromise from '../oauth2/request';
 import storageService from '../services/storageService';
 
 interface RequestData {
@@ -22,7 +22,7 @@ export const createSubRequests = async (req: any[]): Promise<any[]> => {
         if (data.action === "update" || data.action === "delete") {
             uri = uri + "/" + data.body.data.id;
             if (data.action === "delete") {
-                data.body = {};
+                delete data['body'];
             }
         }
 
@@ -42,7 +42,6 @@ export const createSubRequests = async (req: any[]): Promise<any[]> => {
         if (data.waitFor !== undefined) {
             sub.waitfor = data.waitFor;
         }
-
         return sub;
     });
 
@@ -64,7 +63,6 @@ export const deleteSelectedRows = (selectedRows: any[]): any[] => {
         };
         req.push(logData);
     });
-    console.log('Delete Request:', req);
     return req;
 };
 
@@ -74,7 +72,8 @@ export const deleteLogs = async (selectedRows: any[]) => {
         console.log('Subrequests:', subrequests);
 
         // Send the subrequests to the Drupal API
-        await axios.post('/subrequests?_format=json', { requests: subrequests });
+        const axiosInstance = await axiosInstancePromise;
+        await axiosInstance.post('/subrequests?_format=json', subrequests );
         console.log(`Logs deleted successfully for selected rows`);
     } catch (error) {
         console.error('Error deleting logs:', error);

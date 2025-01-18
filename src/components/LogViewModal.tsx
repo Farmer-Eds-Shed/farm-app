@@ -7,6 +7,7 @@ import './LogViewModal.css';
 import Table from './Table';
 import useFetchData from '../hooks/useFetchData';
 import { activityLogColDefs } from '../constants/ColumnDefinitions';
+import { deleteLogs } from '../services/subRequests';
 
 interface CustomModalProps {
     isOpen: boolean;
@@ -32,9 +33,9 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
         onEditLog(logData);
     };
 
-    const handleLogDelete = (logId: string) => {
+    const handleLogDelete = () => {
         // Your logic to delete the log, e.g., calling an API endpoint
-        console.log(`Log with id ${logId} deleted`);
+        deleteLogs(selectedRows);
     };
 
     const handleSelectionChanged = (event: any) => {
@@ -123,7 +124,7 @@ const LogViewModal: React.FC<CustomModalProps> = ({ isOpen, onClose, cellData, t
                                     onSelectionChanged={handleSelectionChanged}
                                     isExternalFilterPresent={false} 
                                 />
-                                <IonButton onClick={() => handleLogDelete(cellData?.id)}>Delete Log</IonButton>
+                                <IonButton onClick={() => handleLogDelete()}>Delete Log</IonButton>
                             </div>
                         </div>
                     </IonCardContent>
