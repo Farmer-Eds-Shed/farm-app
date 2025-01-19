@@ -99,7 +99,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
     <IonModal isOpen={isOpen} onDidDismiss={onClose}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Create New Activity Log</IonTitle>
+          <IonTitle>Create New Event Log</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

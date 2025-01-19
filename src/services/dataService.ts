@@ -227,6 +227,17 @@ export const fetchEquipmentLogs = async (id:any) => {
     return results.map(mapLogData);
 };
 
+export const fetcAllCompleteLogs = async () => {
+  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[status]=done');
+    return results.map(mapLogData);
+}
+
+export const fetcAllIncompleteLogs = async () => {
+  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[status]=pending');
+    return results.map(mapLogData);
+}
+  
+
 // Post a new log.
 export const postLog = async (logData: any) => {
   try {
