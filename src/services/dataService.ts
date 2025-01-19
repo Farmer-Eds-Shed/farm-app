@@ -227,8 +227,8 @@ export const fetchEquipmentLogs = async (id:any) => {
     return results.map(mapLogData);
 };
 
-// Post a new activity log.
-export const postActivityLog = async (logData: any) => {
+// Post a new log.
+export const postLog = async (logData: any) => {
   try {
     const axiosInstance = await axiosInstancePromise;
     const logType = logData.data.type.replace(/--/g, '/');

@@ -15,7 +15,7 @@ import {
     IonCard,
     IonCardHeader
   } from '@ionic/react';
-import { postActivityLog } from '../services/dataService';
+import { postLog } from '../services/dataService';
 
 interface NewEventModalProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
     };
     console.log('New Log:', log);
     try {
-      await postActivityLog(log);
+      await postLog(log);
       console.log('New Activity Log Created');
       onClose();
     } catch (error) {
