@@ -78,7 +78,6 @@ const LivestockPage: React.FC = () => {
   };
 
   const saveEditedLog = (editedLog: any) => {
-    // Implement the logic to save the edited log
     console.log('Edited Log:', editedLog);
     closeEditModal(); // Close the edit modal after saving
   };
@@ -166,6 +165,7 @@ const LivestockPage: React.FC = () => {
             isOpen={isNewEventModalOpen} 
             onClose={() => setIsNewEventModalOpen(false)}
             selectedRows={selectedRows}
+            assetType="animal" // Pass assetType as animal
           />
         </div>
       </IonContent>

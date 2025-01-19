@@ -15,16 +15,27 @@ import { fetchEquipment, fetchEquipmentLogs, fetchMaintenanceLogs } from '../ser
 import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
 import { equipmentColDefs } from '../constants/ColumnDefinitions';
-import Modal from '../components/LogViewModal';
+import LogViewModal from '../components/LogViewModal';
+import EditLogModal from '../components/EditLogModal';
+import NewEventModal from '../components/NewEventModal';
 import './Page.css';
 
 const EquipmentPage: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isNewEventModalOpen, setIsNewEventModalOpen] = useState<boolean>(false);
   const [cellData, setCellData] = useState<any>(null);
+  const [logData, setLogData] = useState<any>(null);
 
   const handleBatchLog = () => {
+    if (selectedRows.length > 0){ 
+      setIsNewEventModalOpen(true);
+    }
+    else {
+      alert("No rows selected");
+    }
     console.log('Selected Cells:', selectedRows);
   };
 
@@ -38,17 +49,26 @@ const EquipmentPage: React.FC = () => {
 
   const handleCellClick = (data: any) => {
     setCellData(data);
-    setIsModalOpen(true);
+    setIsViewModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
     setCellData(null);
   };
 
-  const handleEditLog = (data: any) => {
-    // Implement your edit log logic here
-    console.log("Editing log:", data);
+  const handleEditLog = (logData: any) => {
+    setLogData(logData);
+    setIsEditModalOpen(true); // Open the edit modal
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const saveEditedLog = (editedLog: any) => {
+    console.log('Edited Log:', editedLog);
+    closeEditModal(); // Close the edit modal after saving
   };
 
   const { data, loading } = useFetchData(fetchEquipment);
@@ -58,6 +78,7 @@ const EquipmentPage: React.FC = () => {
     (id: string) => fetchEquipmentLogs(id),
     (id: string) => fetchMaintenanceLogs(id),
   ];
+
 
   return (
     <IonPage>
@@ -93,13 +114,25 @@ const EquipmentPage: React.FC = () => {
             selectedRows={selectedRows}
             isExternalFilterPresent={isShowingSelectedRows}
           />
-          <Modal 
-            isOpen={isModalOpen} 
-            onClose={closeModal} 
+          <LogViewModal 
+            isOpen={isViewModalOpen} 
+            onClose={closeViewModal} 
             cellData={cellData} 
             title={`Equipment: ${cellData?.tag ?? 'Unknown'}`}
-            fetchFunctions={fetchFunctions}
-            onEditLog={handleEditLog} // Add the missing property here
+            fetchFunctions={fetchFunctions} 
+            onEditLog={handleEditLog} // Pass the handler
+          />
+          <EditLogModal
+            isOpen={isEditModalOpen}
+            onClose={closeEditModal}
+            logData={logData} // Pass the correct log data
+            onSave={saveEditedLog}
+          />
+          <NewEventModal 
+            isOpen={isNewEventModalOpen} 
+            onClose={() => setIsNewEventModalOpen(false)}
+            selectedRows={selectedRows}
+            assetType="equipment" // Pass assetType as equipment
           />
         </div>
       </IonContent>

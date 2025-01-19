@@ -21,17 +21,18 @@ interface NewEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedRows: any[];
+  assetType: 'animal' | 'equipment'; // New prop to indicate asset type
 }
 
-const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selectedRows }) => {
+const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selectedRows, assetType }) => {
   const [eventType, setEventType] = useState<string>('');
   const [logName, setLogName] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const animalAssets = selectedRows.map(row => ({
-    type: "asset--animal",
+  const assets = selectedRows.map(row => ({
+    type: assetType === 'animal' ? 'asset--animal' : 'asset--equipment',
     id: row.id,
   }));
 
@@ -62,7 +63,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         },
         relationships: {
           asset: {
-            data: animalAssets,
+            data: assets,
           }
         }
       }
@@ -108,7 +109,11 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
           <IonSelect value={eventType} placeholder="Select event type" onIonChange={e => setEventType(e.detail.value)}>
             <IonSelectOption value="log--activity">Activity</IonSelectOption>
             <IonSelectOption value="log--observation">Observation</IonSelectOption>
-            <IonSelectOption value="log--medical">Medical</IonSelectOption>
+            {assetType === 'animal' ? (
+              <IonSelectOption value="log--medical">Medical</IonSelectOption>
+            ) : (
+              <IonSelectOption value="log--maintenance">Maintenance</IonSelectOption>
+            )}
           </IonSelect>
         </IonItem>
         <IonItem>
@@ -133,13 +138,19 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         </IonItem>
         <IonCard>
           <IonCardHeader>
-            <IonTitle>Animal Assets</IonTitle>
+            <IonTitle>{assetType === 'animal' ? 'Animal Assets' : 'Equipment Assets'}</IonTitle>
           </IonCardHeader>
           <div>
-            {selectedRows.map(animal => (
-              <div key={animal.id}>
-                {animal.tag} - {animal.sex}
-              </div>
+            {selectedRows.map(asset => (
+              assetType === 'animal' ? (
+                <div key={asset.id}>
+                  {asset.tag} - {asset.sex}
+                </div>
+              ) : (
+                <div key={asset.id}>
+                  {asset.manufacturer} - {asset.model}
+                </div>
+              )
             ))}
           </div>
         </IonCard>
