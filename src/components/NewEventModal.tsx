@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { 
-    IonModal, 
-    IonButton, 
-    IonContent, 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle,
-    IonLabel,
-    IonItem,
-    IonInput,
-    IonSelect,
-    IonSelectOption,
-    IonTextarea,
-    IonCard,
-    IonCardHeader
-  } from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import {
+  IonModal,
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonLabel,
+  IonItem,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+  IonCard,
+  IonCardHeader,
+} from '@ionic/react';
 import { postLog } from '../services/dataService';
 
 interface NewEventModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedRows: any[]; // Add selectedRows prop
+  selectedRows: any[];
 }
 
 const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selectedRows }) => {
@@ -28,24 +28,41 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
   const [logName, setLogName] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [date, setDate] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   const animalAssets = selectedRows.map(row => ({
     type: "asset--animal",
-    id: row.id, 
-}));
+    id: row.id,
+  }));
+
+  useEffect(() => {
+    if (!isOpen) {
+      setEventType('');
+      setLogName('');
+      setNotes('');
+      setDate('');
+      setErrorMessage('');
+    }
+  }, [isOpen]);
 
   const handleSave = async () => {
+    if (!eventType || !logName || !date) {
+      setErrorMessage('Event Type, Log Name, and Date are required fields.');
+      return;
+    }
+
     const log = {
       data: {
         type: eventType,
         attributes: {
           name: logName,
           timestamp: new Date(date).toISOString().replace('.000Z', '+00:00'),
-          status: "done", // Assuming status is done
+          status: "done",
           notes: { value: notes }
         },
         relationships: {
           asset: {
-                    data: animalAssets,
+            data: animalAssets,
           }
         }
       }
@@ -85,9 +102,10 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        {errorMessage && <div style={{ color: 'red', padding: '10px' }}>{errorMessage}</div>}
         <IonItem>
           <IonLabel position="stacked">Event Type</IonLabel>
-          <IonSelect value={eventType} placeholder="Activity" onIonChange={e => setEventType(e.detail.value)}>
+          <IonSelect value={eventType} placeholder="Select event type" onIonChange={e => setEventType(e.detail.value)}>
             <IonSelectOption value="log--activity">Activity</IonSelectOption>
             <IonSelectOption value="log--observation">Observation</IonSelectOption>
             <IonSelectOption value="log--medical">Medical</IonSelectOption>
@@ -114,17 +132,17 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
           />
         </IonItem>
         <IonCard>
-                    <IonCardHeader>
-                        <IonTitle>Animal Assets</IonTitle>
-                    </IonCardHeader>
-                    <div>
-                        {selectedRows.map(animal => (
-                            <div key={animal.id}>
-                                {animal.tag} - {animal.sex}
-                            </div>
-                        ))}
-                    </div>
-                </IonCard>
+          <IonCardHeader>
+            <IonTitle>Animal Assets</IonTitle>
+          </IonCardHeader>
+          <div>
+            {selectedRows.map(animal => (
+              <div key={animal.id}>
+                {animal.tag} - {animal.sex}
+              </div>
+            ))}
+          </div>
+        </IonCard>
         <IonButton onClick={handleSave}>Save</IonButton>
         <IonButton onClick={onClose}>Cancel</IonButton>
       </IonContent>
