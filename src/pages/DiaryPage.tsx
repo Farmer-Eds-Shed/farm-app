@@ -12,12 +12,8 @@ import {
 import { eye, eyeOff } from 'ionicons/icons';
 import useFetchData from '../hooks/useFetchData';
 import {
-  fetchActiveAnimals,
-  fetchPurchasedAnimals,
-  fetchSoldAnimals,
-  fetchDeadAnimals,
-  fetcAllIncompleteLogs,
-  fetcAllCompleteLogs
+  fetchAllIncompleteLogs,
+  fetchAllCompleteLogs
 } from '../services/dataService';
 import { handleExportCSV } from '../services/exportService';
 import Table from '../components/Table';
@@ -57,16 +53,12 @@ const DiaryPage: React.FC = () => {
 
   const dataFetchers = useMemo(() => {
     return {
-      done: fetcAllCompleteLogs,
-      pending: fetcAllIncompleteLogs,
+      done: fetchAllCompleteLogs,
+      pending: fetchAllIncompleteLogs,
     };
   }, []);
 
   const { data, loading } = useFetchData(dataFetchers[selectedTable]);
-
-  const fetchFunctions = [
-    fetcAllIncompleteLogs
-  ];
 
   return (
     <IonPage>

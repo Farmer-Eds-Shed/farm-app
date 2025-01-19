@@ -68,6 +68,12 @@ const mapStatus = (status: string): string => {
   }
 };
 
+// Centralized error handling
+const handleError = (error: unknown) => {
+  console.error('Error:', error);
+  throw error;
+};
+
 // Fetch paginated data from the farmOS API.
 const fetchPaginatedData = async (initialUrl: string) => {
   let results: any[] = [];
@@ -87,8 +93,7 @@ const fetchPaginatedData = async (initialUrl: string) => {
         currentPageUrl = null;
       }
     } catch (error) {
-      console.error('Error fetching paginated data:', error);
-      throw error;
+      handleError(error);
     }
   }
 
@@ -176,8 +181,7 @@ export const fetchPurchasedAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name');
   const animalsPurchased = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && !animal.attributes.data.includes(',"total_movements":0,'));
-    console.log(results);
-    return animalsPurchased.map(mapAnimalData);
+  return animalsPurchased.map(mapAnimalData);
 };
 
 // Fetch animals that have been born. (Currently, this is determined by the absence of a 'total_movements' in the animal's data field.)
@@ -185,79 +189,74 @@ export const fetchHomeBredAnimals = async () => {
   const results = await fetchPaginatedData('/api/asset/animal?sort=name');
   const animalsHome = results
     .filter(animal => animal.attributes.data && typeof animal.attributes.data === 'string' && animal.attributes.data.includes(',"total_movements":0,'));
-    console.log(results);
-    return animalsHome.map(mapAnimalData);
+  return animalsHome.map(mapAnimalData);
 };
-
 
 // Fetch activity logs for a specific animal.
-export const fetchActivityLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchActivityLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/activity?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetchBirthLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/birth?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchBirthLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/birth?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetchObservationLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/observation?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchObservationLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/observation?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetchMedicalLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/medical?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchMedicalLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/medical?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetchHarvestLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/harvest?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchHarvestLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/harvest?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
 // Fetch maintenance logs for a specific equipment.
-export const fetchMaintenanceLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/maintenance?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchMaintenanceLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/maintenance?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetchEquipmentLogs = async (id:any) => {
-  const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[asset.id]='+id);
-    return results.map(mapLogData);
+export const fetchEquipmentLogs = async (id: string) => {
+  const results = await fetchPaginatedData(`/api/log/activity?sort=name&filter[asset.id]=${id}`);
+  return results.map(mapLogData);
 };
 
-export const fetcAllCompleteLogs = async () => {
+export const fetchAllCompleteLogs = async () => {
   const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[status]=done');
-    return results.map(mapLogData);
-}
+  return results.map(mapLogData);
+};
 
-export const fetcAllIncompleteLogs = async () => {
+export const fetchAllIncompleteLogs = async () => {
   const results = await fetchPaginatedData('/api/log/activity?sort=name&filter[status]=pending');
-    return results.map(mapLogData);
-}
-  
+  return results.map(mapLogData);
+};
 
 // Post a new log.
-export const postLog = async (logData: any) => {
+export const postLog = async (logData: { data: { type: string; [key: string]: any } }) => {
   try {
     const axiosInstance = await axiosInstancePromise;
     const logType = logData.data.type.replace(/--/g, '/');
     await axiosInstance.post(`/api/${logType}`, logData);
   } catch (error) {
-    console.error('Error posting activity log:', error);
-    throw error;
+    handleError(error);
   }
 };
 
-//Patch an existing log.
-export const patchLog = async (logData: any) => {
+// Patch an existing log.
+export const patchLog = async (logData: { data: { type: string; id: string; [key: string]: any } }) => {
   try {
     const axiosInstance = await axiosInstancePromise;
     const logType = logData.data.type.replace(/--/g, '/');
     await axiosInstance.patch(`/api/${logType}/${logData.data.id}`, logData);
   } catch (error) {
-    console.error('Error patching activity log:', error);
-    throw error;
+    handleError(error);
   }
 };
