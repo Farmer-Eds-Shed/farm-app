@@ -1,16 +1,7 @@
+// Subrequests service to create subrequests for the farmOS API
 import axiosInstancePromise from '../oauth2/request';
 import storageService from '../services/storageService';
 
-interface RequestData {
-    action: string;
-    body: {
-        data: {
-            type: string;
-            id?: string;
-        };
-    };
-    waitFor?: string;
-}
 
 export const createSubRequests = async (req: any[]): Promise<any[]> => {
     const accessToken = await storageService.getItem('accessToken');

@@ -1,3 +1,4 @@
+// Code to handle OAuth2 token refreshes in Axios interceptors.
 import axios from 'axios';
 import storageService from '../services/storageService';
 
