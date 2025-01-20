@@ -22,7 +22,7 @@ import EditLogModal from '../components/EditLogModal';
 import './Page.css';
 
 const DiaryPage: React.FC = () => {
-  const [selectedTable, setSelectedTable] = useState<'done' | 'pending'>('done');
+  const [selectedTable, setSelectedTable] = useState<'done' | 'pending'>('pending');
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [isShowingSelectedRows, setIsShowingSelectedRows] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -82,8 +82,8 @@ const DiaryPage: React.FC = () => {
                 value={selectedTable}
                 onChange={e => setSelectedTable(e.target.value as 'done' | 'pending')}
               >
-                <option value="done">Complete Logs</option>
-                <option value="pending">Incomplete</option>
+                <option value="done">Done</option>
+                <option value="pending">To Do</option>
               </select>
             </div>
           </div>
