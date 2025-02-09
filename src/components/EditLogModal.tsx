@@ -10,10 +10,12 @@ import {
   IonItem,
   IonLabel,
   IonTextarea,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/react';
 import './EditLogModal.css';
-import { patchLog } from '../services/dataService'; // Import the patchActivityLog function
-import { formatDateForInput } from '../services/dateService'; // Import the formatDateForInput function
+import { patchLog } from '../services/dataService';
+import { formatDateForInput } from '../services/dateService';
 
 interface EditLogModalProps {
   isOpen: boolean;
@@ -29,42 +31,40 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
     if (logData) {
       setEditedLog({
         ...logData,
-        date: formatDateForInput(logData.date) // Ensure date is correctly formatted
+        date: formatDateForInput(logData.date),
       });
     }
   }, [logData]);
 
   const handleSave = async () => {
     try {
-      // Prepare the editedLog as per the schema and include the log ID
       const logDataToPatch = {
-        data:{
+        data: {
           id: editedLog.id,
           type: editedLog.type,
           attributes: {
             name: editedLog.name,
             notes: { value: editedLog.notes },
-            timestamp: new Date(editedLog.date).toISOString().replace('.000Z', '+00:00'), // Format date
-            status: editedLog.status
-          }
-        }
+            timestamp: new Date(editedLog.date).toISOString().replace('.000Z', '+00:00'),
+            status: editedLog.status,
+          },
+        },
       };
 
-      await patchLog(logDataToPatch); // Save the edited log data using patchActivityLog
-      onSave(editedLog); // Call onSave callback
+      await patchLog(logDataToPatch);
+      onSave(editedLog);
     } catch (error) {
       console.error('Error saving edited log:', error);
     }
-    onClose(); // Close the edit modal after saving
+    onClose();
   };
 
   const handleChange = (field: string, value: any) => {
     setEditedLog((prevLog: any) => ({ ...prevLog, [field]: value }));
   };
 
-
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose} >
+    <IonModal isOpen={isOpen} onDidDismiss={onClose}>
       <div className="edit-modal">
         <IonHeader>
           <IonToolbar>
@@ -99,6 +99,16 @@ const EditLogModal: React.FC<EditLogModalProps> = ({ isOpen, onClose, logData, o
                   value={editedLog.date}
                   onIonChange={(e) => handleChange('date', e.detail.value)}
                 />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Status</IonLabel>
+                <IonSelect
+                  value={editedLog.status}
+                  onIonChange={(e) => handleChange('status', e.detail.value)}
+                >
+                  <IonSelectOption value="done">Done</IonSelectOption>
+                  <IonSelectOption value="pending">Pending</IonSelectOption>
+                </IonSelect>
               </IonItem>
               <IonButton expand="block" onClick={handleSave}>
                 Save

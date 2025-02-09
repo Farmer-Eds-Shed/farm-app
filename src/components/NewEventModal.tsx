@@ -21,7 +21,7 @@ interface NewEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedRows: any[];
-  assetType: 'animal' | 'equipment'; // New prop to indicate asset type
+  assetType: 'animal' | 'equipment';
 }
 
 const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selectedRows, assetType }) => {
@@ -29,6 +29,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
   const [logName, setLogName] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [date, setDate] = useState<string>('');
+  const [status, setStatus] = useState<string>('pending');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const assets = selectedRows.map(row => ({
@@ -42,6 +43,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
       setLogName('');
       setNotes('');
       setDate('');
+      setStatus('pending');
       setErrorMessage('');
     }
   }, [isOpen]);
@@ -58,7 +60,7 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         attributes: {
           name: logName,
           timestamp: new Date(date).toISOString().replace('.000Z', '+00:00'),
-          status: "done",
+          status: status,
           notes: { value: notes }
         },
         relationships: {
@@ -88,6 +90,9 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
         break;
       case 'date':
         setDate(value);
+        break;
+      case 'status':
+        setStatus(value);
         break;
       default:
         break;
@@ -135,6 +140,13 @@ const NewEventModal: React.FC<NewEventModalProps> = ({ isOpen, onClose, selected
             type="date"
             onIonChange={(e) => handleChange('date', e.detail.value)}
           />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Status</IonLabel>
+          <IonSelect value={status} placeholder="Select status" onIonChange={e => handleChange('status', e.detail.value)}>
+            <IonSelectOption value="done">Done</IonSelectOption>
+            <IonSelectOption value="pending">Pending</IonSelectOption>
+          </IonSelect>
         </IonItem>
         <IonCard>
           <IonCardHeader>
